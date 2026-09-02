@@ -40,6 +40,26 @@
 - 内联 SVG 图标组件、状态标签、毛玻璃列表等自定义组件
 - 深/浅色主题自适应
 
+## 📸 界面预览
+
+<table>
+  <tr>
+    <td align="center"><img src="screenshots/shot-1.png" width="240"/></td>
+    <td align="center"><img src="screenshots/shot-2.png" width="240"/></td>
+    <td align="center"><img src="screenshots/shot-3.png" width="240"/></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/shot-4.png" width="240"/></td>
+    <td align="center"><img src="screenshots/shot-9.png" width="240"/></td>
+    <td align="center"><img src="screenshots/shot-5.png" width="240"/></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/shot-6.png" width="240"/></td>
+    <td align="center"><img src="screenshots/shot-7.png" width="240"/></td>
+    <td align="center"><img src="screenshots/shot-8.png" width="240"/></td>
+  </tr>
+</table>
+
 ## 🗂 项目结构
 
 ```
