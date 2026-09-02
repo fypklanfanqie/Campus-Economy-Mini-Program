@@ -3,6 +3,8 @@
 > 一个基于 **微信小程序 + 腾讯云开发（CloudBase）** 的校园跑腿/代拿平台。支持快递代拿、文件打印、外卖代拿、校内商家代取餐等场景，含骑手接单与提现、管理员后台、微信支付。
 
 ![GitHub License](https://img.shields.io/github/license/fypklanfanqie/Campus-Economy-Mini-Program)
+<img width="1254" height="1254" alt="file_00000000d83c8207a8fd47cd237c7940" src="https://github.com/user-attachments/assets/29964407-233d-43b8-af04-f08646ea9353" />
+
 
 ## ⚠️ 开源与使用须知
 
@@ -16,7 +18,7 @@
 > 简言之：**代码公开可学可改，但「拿去做生意」必须经过我的同意（Issues 申请）。**
 
 ## ✨ 功能
-
+<img width="361" height="783" alt="屏幕截图 2026-09-02 183919" src="https://github.com/user-attachments/assets/e8d05a89-66a0-4899-8985-e812f8bf838f" />
 ### 用户侧
 - 🚚 **快递代拿**：选择包裹大小（小/中/大件）+ 校内/校外，系统自动计价并下单
 - 🖨️ **文件打印**：上传 doc/docx/pdf，自动解析页数、选择份数，按页计价
