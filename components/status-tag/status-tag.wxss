@@ -1,0 +1,24 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 16rpx;
+  border-radius: 100rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.tag-pending,
+.tag-pending_payment { background: rgba(255, 149, 0, 0.12); color: #FF9500; }
+.tag-accepted { background: rgba(0, 122, 255, 0.12); color: #007AFF; }
+.tag-delivering { background: rgba(52, 199, 89, 0.12); color: #34C759; }
+.tag-completed { background: rgba(175, 82, 222, 0.12); color: #AF52DE; }
+.tag-cancelled { background: rgba(142, 142, 147, 0.12); color: #8E8E93; }
+
+@media (prefers-color-scheme: dark) {
+  .tag-pending,
+  .tag-pending_payment { background: rgba(255, 159, 10, 0.18); color: #FF9F0A; }
+  .tag-accepted { background: rgba(10, 132, 255, 0.18); color: #0A84FF; }
+  .tag-delivering { background: rgba(48, 209, 88, 0.18); color: #30D158; }
+  .tag-completed { background: rgba(191, 90, 242, 0.18); color: #BF5AF2; }
+  .tag-cancelled { background: rgba(142, 142, 147, 0.18); color: #8E8E93; }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "getRiderHome",
+  "version": "1.0.0",
+  "description": "骑手中心首页数据",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

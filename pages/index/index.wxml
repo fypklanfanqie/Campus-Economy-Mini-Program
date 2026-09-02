@@ -1,0 +1,50 @@
+<view class="page">
+  <!-- 品牌区 -->
+  <view class="brand-section">
+    <view class="brand-card">
+      <image class="brand-logo" src="/images/brand-logo.png" mode="aspectFit" />
+      <view class="brand-info">
+        <text class="brand-title">NTU快递帮</text>
+        <text class="brand-subtitle">足不出宿，快递到手</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 服务宫格 -->
+  <view class="service-grid">
+    <view class="service-card card-blue" bindtap="goOrder">
+      <icon class="service-icon" name="shippingbox" size="52" color="#007AFF" />
+      <view class="service-meta">
+        <text class="service-name">快递代拿</text>
+        <text class="service-desc">¥2.9 起</text>
+      </view>
+    </view>
+
+    <view class="service-card card-orange" bindtap="goPrint">
+      <icon class="service-icon" name="printer" size="52" color="#FF9500" />
+      <view class="service-meta">
+        <text class="service-name">文件打印</text>
+        <text class="service-desc">¥0.2/页</text>
+      </view>
+    </view>
+
+    <view class="service-card card-green" bindtap="goTakeout">
+      <icon class="service-icon" name="takeoutbag" size="52" color="#34C759" />
+      <view class="service-meta">
+        <text class="service-name">外卖代拿</text>
+        <text class="service-desc">送宿舍门口</text>
+      </view>
+    </view>
+
+    <view class="service-card card-purple" bindtap="goSelfpick">
+      <icon class="service-icon" name="fork-knife" size="52" color="#AF52DE" />
+      <view class="service-meta">
+        <text class="service-name">校内代取餐</text>
+        <text class="service-desc">¥3/单</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部占位，防止 Dock 遮挡 -->
+  <view class="dock-placeholder" />
+</view>

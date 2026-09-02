@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "icon": "/components/icon/icon"
+  },
+  "navigationBarTitleText": "NTU快递帮"
+}

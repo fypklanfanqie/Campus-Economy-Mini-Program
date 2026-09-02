@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/order/order",
+    "pages/print/print",
+    "pages/takeout/takeout",
+    "pages/selfpick/selfpick",
+    "pages/order-list/order-list",
+    "pages/order-detail/order-detail",
+    "pages/profile/profile",
+    "pages/rider/rider",
+    "pages/admin/dashboard"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#F9F9F9F2",
+    "navigationBarTitleText": "NTU快递帮",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F2F2F7",
+    "navigationStyle": "default"
+  },
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "custom": true,
+    "color": "#8E8E93",
+    "selectedColor": "#007AFF",
+    "backgroundColor": "#F9F9F9F2",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/order-list/order-list",
+        "text": "订单"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2"
+}

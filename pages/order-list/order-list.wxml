@@ -1,0 +1,77 @@
+<!-- pages/order-list/order-list.wxml - 订单列表页（iOS 18 磨砂玻璃风格） -->
+<view class="page">
+  <!-- 磨砂吸顶 tab 栏 -->
+  <view class="glass-nav tabs-bar">
+    <scroll-view class="tabs-scroll" scroll-x="true" show-scrollbar="{{false}}">
+      <view class="tabs">
+        <view class="tab {{activeTab === 'all' ? 'active' : ''}}" bindtap="switchTab" data-tab="all">全部</view>
+        <view class="tab {{activeTab === 'pending_payment' ? 'active' : ''}}" bindtap="switchTab" data-tab="pending_payment">待付款</view>
+        <view class="tab {{activeTab === 'pending_pickup' ? 'active' : ''}}" bindtap="switchTab" data-tab="pending_pickup">待接单</view>
+        <view class="tab {{activeTab === 'accepted' ? 'active' : ''}}" bindtap="switchTab" data-tab="accepted">已接单</view>
+        <view class="tab {{activeTab === 'delivering' ? 'active' : ''}}" bindtap="switchTab" data-tab="delivering">配送中</view>
+        <view class="tab {{activeTab === 'completed' ? 'active' : ''}}" bindtap="switchTab" data-tab="completed">已完成</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 订单列表 -->
+  <view class="order-list" wx:if="{{orders.length > 0}}">
+    <view class="order-card glass-card" wx:for="{{orders}}" wx:key="_id" bindtap="goDetail" data-id="{{item._id}}">
+      <view class="order-header">
+        <view class="order-type">
+          <view class="order-type-icon">
+            <icon wx:if="{{item.orderType === 'print'}}" name="printer" size="34" color="#007AFF" />
+            <icon wx:elif="{{item.orderType === 'takeout'}}" name="takeoutbag" size="34" color="#FF9500" />
+            <icon wx:elif="{{item.orderType === 'selfpick'}}" name="fork-knife" size="34" color="#34C759" />
+            <icon wx:else name="shippingbox" size="34" color="#AF52DE" />
+          </view>
+          <text class="order-type-text">{{item.orderType === 'print' ? '文件打印' : item.orderType === 'takeout' ? '外卖代拿' : item.orderType === 'selfpick' ? '校内代取餐' : '快递代拿'}}</text>
+        </view>
+        <status-tag status="{{item.status}}" text="{{statusTextMap[item.status]}}" />
+      </view>
+      <view class="order-body">
+        <view class="order-info">
+          <block wx:if="{{item.orderType === 'print'}}">
+            <text class="info-main">{{item.fileName}}</text>
+          </block>
+          <block wx:elif="{{item.orderType === 'takeout'}}">
+            <text class="info-main">外卖代拿 · {{item.gateLocation}}</text>
+            <text class="info-sub">{{item.deliveryType === 'dorm' ? '送宿舍门口' : '送园区门口'}}</text>
+          </block>
+          <block wx:else>
+            <text class="info-main">{{sizeTextMap[item.packageSize] || item.packageSize}} · {{item.locationType === 'offCampus' ? '校外' : '校内'}}</text>
+            <text class="info-sub">取件码：{{item.pickupCode}}</text>
+          </block>
+        </view>
+        <view class="order-price price price-large">¥{{item.price}}</view>
+      </view>
+      <view class="order-footer">
+        <view class="order-time">
+          <icon name="clock" size="24" color="var(--text-tertiary)" />
+          <text>{{item.createTimeText}}</text>
+        </view>
+        <view class="order-actions" catchtap="noop">
+          <button class="action-pay" wx:if="{{item.status === 'pending_payment'}}" catchtap="goPay" data-id="{{item._id}}" data-price="{{item.price}}" size="mini">去付款</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{orders.length === 0 && !loading}}">
+    <view class="empty-icon">
+      <icon name="shippingbox" size="140" color="var(--text-tertiary)" weight="1.5" />
+    </view>
+    <text>暂无订单</text>
+    <button class="btn-primary go-home-btn" bindtap="goHome">去下单</button>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore && orders.length > 0}}">
+    <text wx:if="{{loading}}">加载中…</text>
+    <text wx:else bindtap="loadMore">点击加载更多</text>
+  </view>
+  <view class="load-more" wx:if="{{!hasMore && orders.length > 0}}">
+    <text class="no-more">没有更多了</text>
+  </view>
+</view>

@@ -1,0 +1,120 @@
+<!-- pages/selfpick/selfpick.wxml - 校内商家代取餐下单页（iOS 18 磨砂玻璃风格） -->
+<view class="page">
+  <!-- 说明 -->
+  <view class="section-header">校内代取餐</view>
+  <view class="glass-card intro-card">
+    <view class="intro-icon">
+      <icon name="exclamationmark-circle" size="36" color="#FFFFFF" />
+    </view>
+    <view class="intro-body">
+      <text class="intro-title">团购券想自己拿？我们送上门！</text>
+      <text class="intro-price">统一价 ¥3.00 / 单</text>
+    </view>
+  </view>
+
+  <!-- 注意事项 -->
+  <view class="section-header">下单前必读</view>
+  <view class="glass-list">
+    <view class="note-row">
+      <view class="note-icon">
+        <icon name="mappin" size="32" color="var(--primary-color)" />
+      </view>
+      <text class="note-text">仅支持校内商家取餐，请填写准确的商家地点</text>
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="note-row">
+      <view class="note-icon">
+        <icon name="doc-on-doc" size="32" color="var(--primary-color)" />
+      </view>
+      <text class="note-text">请务必填写正确的取餐码，便于骑手快速取餐</text>
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="note-row">
+      <view class="note-icon">
+        <icon name="checkmark-circle" size="32" color="var(--primary-color)" />
+      </view>
+      <text class="note-text">下单时请确认订单【已经出餐】，避免骑手空跑</text>
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="note-row">
+      <view class="note-icon">
+        <icon name="bicycle" size="32" color="var(--primary-color)" />
+      </view>
+      <text class="note-text">骑手取到餐后会送至你选择的宿舍园区门口</text>
+    </view>
+  </view>
+
+  <!-- 收货人信息 -->
+  <view class="section-header">收货人信息</view>
+  <view class="glass-list">
+    <view class="form-item">
+      <text class="form-label">姓名</text>
+      <input class="form-input" placeholder="请填写收货人姓名" value="{{recipientName}}" bindinput="onNameInput" maxlength="20" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item">
+      <text class="form-label">手机号</text>
+      <input class="form-input" type="number" placeholder="接收配送通知" value="{{phone}}" bindinput="onPhoneInput" maxlength="11" />
+    </view>
+  </view>
+
+  <!-- 取餐信息 -->
+  <view class="section-header">取餐信息</view>
+  <view class="glass-list">
+    <view class="form-item">
+      <text class="form-label">取餐码</text>
+      <input class="form-input" placeholder="如：A12 / 取餐号88" value="{{pickupCode}}" bindinput="onPickupInput" maxlength="30" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item">
+      <text class="form-label">商家地点</text>
+      <input class="form-input" placeholder="如：一食堂2楼XX店" value="{{merchantLocation}}" bindinput="onMerchantInput" maxlength="50" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item" bindtap="showZonePicker">
+      <text class="form-label">送达园区</text>
+      <text class="form-input picker-value {{deliveryZone ? '' : 'placeholder'}}">{{deliveryZone || '请选择送达园区'}}</text>
+      <icon name="chevron-right" size="28" color="var(--text-tertiary)" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item">
+      <text class="form-label">备注</text>
+      <input class="form-input" placeholder="选填，如：放楼下货架" value="{{remark}}" bindinput="onRemarkInput" maxlength="200" />
+    </view>
+  </view>
+
+  <!-- 已出餐确认 -->
+  <view class="confirm-card {{confirmedReady ? 'active' : ''}}" bindtap="toggleConfirm">
+    <view class="confirm-box {{confirmedReady ? 'checked' : ''}}">
+      <icon wx:if="{{confirmedReady}}" name="checkmark" size="30" color="#FFFFFF" />
+    </view>
+    <view class="confirm-text">
+      <text class="confirm-main">我确认该订单【已经出餐】</text>
+      <text class="confirm-sub">请勿让辛苦的骑手白跑一趟</text>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-wrap">
+    <button class="btn-primary submit-btn" bindtap="submitOrder" loading="{{submitting}}" disabled="{{submitting || !canSubmit}}">
+      立即支付 ¥{{priceText}}
+    </button>
+  </view>
+
+  <!-- 园区选择器 -->
+  <view class="glass-mask" wx:if="{{showZoneModal}}" catchtap="closeZonePicker"></view>
+  <view class="bottom-sheet zone-modal" wx:if="{{showZoneModal}}" catchtap="noop">
+    <view class="modal-grip"></view>
+    <view class="zone-modal-head">
+      <text class="zone-modal-title">选择送达园区</text>
+      <view class="zone-modal-close" catchtap="closeZonePicker">
+        <icon name="xmark" size="32" color="var(--text-secondary)" />
+      </view>
+    </view>
+    <view class="zone-grid">
+      <view class="zone-cell {{deliveryZone === item ? 'selected' : ''}}" wx:for="{{zoneOptions}}" wx:key="*this" bindtap="selectZone" data-zone="{{item}}">
+        {{item}}
+      </view>
+    </view>
+  </view>
+</view>

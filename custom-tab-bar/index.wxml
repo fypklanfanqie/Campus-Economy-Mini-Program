@@ -1,0 +1,16 @@
+<view class="dock-wrap">
+  <view class="dock">
+    <view
+      class="dock-item {{selected === index ? 'active' : ''}}"
+      wx:for="{{list}}"
+      wx:key="index"
+      data-index="{{index}}"
+      bindtap="switchTab"
+    >
+      <view class="dock-icon-box">
+        <icon name="{{item.icon}}" size="{{selected === index ? 38 : 34}}" color="{{selected === index ? '#007AFF' : '#8E8E93'}}" fill="{{selected === index}}" />
+      </view>
+      <text class="dock-text {{selected === index ? 'active' : ''}}">{{item.text}}</text>
+    </view>
+  </view>
+</view>

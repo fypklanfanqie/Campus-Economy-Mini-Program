@@ -1,0 +1,68 @@
+.dock-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  z-index: 99;
+  pointer-events: none;
+}
+
+.dock {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 420rpx;
+  height: 96rpx;
+  background: var(--bg-glass, rgba(255, 255, 255, 0.85));
+  backdrop-filter: saturate(180%) blur(40rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(40rpx);
+  border-radius: 100rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.12);
+  pointer-events: auto;
+}
+
+.dock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+}
+
+.dock-icon-box {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14rpx;
+  transition: all 0.2s ease;
+}
+
+.dock-item.active .dock-icon-box {
+  background: rgba(0, 122, 255, 0.12);
+}
+
+.dock-text {
+  font-size: 20rpx;
+  color: #8E8E93;
+  margin-top: 4rpx;
+  transition: color 0.2s ease;
+}
+
+.dock-text.active {
+  color: #007AFF;
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dock {
+    background: rgba(28, 28, 30, 0.85);
+    border: 1rpx solid rgba(255, 255, 255, 0.1);
+  }
+}

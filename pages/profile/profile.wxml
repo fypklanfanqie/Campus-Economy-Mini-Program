@@ -1,0 +1,155 @@
+<view class="page">
+  <!-- 用户头部 -->
+  <view class="user-banner">
+    <view class="user-banner-inner">
+      <button class="avatar-wrap" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar" bindlongpress="showAdminEntry">
+        <image class="avatar-img" src="{{userInfo.avatarUrl || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'}}" mode="aspectFill" />
+        <text class="avatar-tip" wx:if="{{!userInfo.avatarUrl}}">点击选头像</text>
+      </button>
+      <view class="user-info">
+        <input class="nickname-input" type="nickname" placeholder="点击获取微信昵称" value="{{userInfo.nickName}}" bindinput="onNicknameInput" bindblur="onNicknameBlur" bindtap="onNicknameTap" />
+        <text class="user-id">ID: {{userOpenid || '未登录'}}</text>
+        <button class="login-btn" size="mini" bindtap="onWechatLogin" wx:if="{{!userInfo.avatarUrl || !userInfo.nickName}}">微信一键登录</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 管理员入口提示 -->
+  <view class="admin-tip" wx:if="{{showAdminTip}}">
+    <icon name="exclamationmark-circle" size="28" color="#FF9500" />
+    <text>检测到管理员入口</text>
+  </view>
+
+  <!-- 管理员密码弹窗 -->
+  <view class="glass-mask" wx:if="{{showAdminModal}}" catchtap="closeAdminModal"></view>
+  <view class="center-modal" wx:if="{{showAdminModal}}" catchtap="noop">
+    <view class="modal-title">管理员验证</view>
+    <text class="modal-desc">请输入管理员密码</text>
+    <input class="password-input glass-input" type="password" placeholder="请输入密码" value="{{adminPassword}}" bindinput="onPasswordInput" focus="{{showAdminModal}}" />
+    <view class="modal-btns">
+      <button class="modal-btn modal-cancel" bindtap="closeAdminModal">取消</button>
+      <button class="modal-btn modal-confirm" bindtap="verifyAdmin">验证登录</button>
+    </view>
+  </view>
+
+  <!-- 订单状态快捷入口 -->
+  <view class="section-header" wx:if="{{orderStats}}">我的订单</view>
+  <view class="glass-list" wx:if="{{orderStats}}">
+    <view class="status-grid">
+      <view class="status-cell" bindtap="goOrders" data-status="pending_payment">
+        <view class="status-icon-box">
+          <icon name="clock" size="32" color="#FF9500" />
+        </view>
+        <text class="status-count">{{orderStats.pending_payment || 0}}</text>
+        <text class="status-label">待付款</text>
+      </view>
+      <view class="status-cell" bindtap="goOrders" data-status="pending_pickup">
+        <view class="status-icon-box">
+          <icon name="clock" size="32" color="#8E8E93" />
+        </view>
+        <text class="status-count">{{orderStats.pending_pickup || 0}}</text>
+        <text class="status-label">待接单</text>
+      </view>
+      <view class="status-cell" bindtap="goOrders" data-status="accepted">
+        <view class="status-icon-box">
+          <icon name="checkmark-circle" size="32" color="#007AFF" />
+        </view>
+        <text class="status-count">{{orderStats.accepted || 0}}</text>
+        <text class="status-label">已接单</text>
+      </view>
+      <view class="status-cell" bindtap="goOrders" data-status="delivering">
+        <view class="status-icon-box">
+          <icon name="bicycle" size="32" color="#34C759" />
+        </view>
+        <text class="status-count">{{orderStats.delivering || 0}}</text>
+        <text class="status-label">配送中</text>
+      </view>
+      <view class="status-cell" bindtap="goOrders" data-status="completed">
+        <view class="status-icon-box">
+          <icon name="checkmark-seal" size="32" color="#AF52DE" />
+        </view>
+        <text class="status-count">{{orderStats.completed || 0}}</text>
+        <text class="status-label">已完成</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="section-header">服务</view>
+  <view class="glass-list">
+    <view class="menu-item" bindtap="goOrders" data-status="all">
+      <view class="menu-icon-box box-blue">
+        <icon name="doc-plaintext" size="28" color="#007AFF" />
+      </view>
+      <text class="menu-title">我的订单</text>
+      <icon name="chevron-right" size="28" color="var(--text-tertiary)" />
+    </view>
+    <view class="glass-list-divider" />
+    <view class="menu-item" bindtap="goRider">
+      <view class="menu-icon-box box-green">
+        <icon name="bicycle" size="28" color="#34C759" />
+      </view>
+      <text class="menu-title">骑手中心</text>
+      <text class="menu-desc" wx:if="{{isRider}}">可提现 ¥{{riderBalance}}</text>
+      <text class="menu-desc" wx:else>接单赚零花钱</text>
+      <icon name="chevron-right" size="28" color="var(--text-tertiary)" />
+    </view>
+  </view>
+
+  <view class="section-header">联系我们</view>
+  <view class="glass-list">
+    <view class="menu-item" bindtap="callPhone">
+      <view class="menu-icon-box box-green">
+        <icon name="phone" size="28" color="#34C759" />
+      </view>
+      <text class="menu-title">手机号</text>
+      <text class="menu-desc">待配置</text>
+      <text class="menu-action">拨打</text>
+    </view>
+    <view class="glass-list-divider" />
+    <view class="menu-item" bindtap="copyQQ">
+      <view class="menu-icon-box box-blue">
+        <icon name="bubble" size="28" color="#007AFF" />
+      </view>
+      <text class="menu-title">QQ号</text>
+      <text class="menu-desc">待配置</text>
+      <text class="menu-action">复制</text>
+    </view>
+    <view class="glass-list-divider" />
+    <view class="menu-item">
+      <view class="menu-icon-box box-purple">
+        <icon name="bubble" size="28" color="#AF52DE" />
+      </view>
+      <text class="menu-title">在线客服</text>
+      <button class="menu-contact-btn" open-type="contact" size="mini" session-from="用户:{{userInfo.nickName || '未设置昵称'}},ID:{{userOpenid || '未登录'}}">联系</button>
+    </view>
+  </view>
+
+  <block wx:if="{{isAdmin}}">
+    <view class="section-header">管理</view>
+    <view class="glass-list">
+      <view class="menu-item" bindtap="goAdmin">
+        <view class="menu-icon-box box-orange">
+          <icon name="gear" size="28" color="#FF9500" />
+        </view>
+        <text class="menu-title">管理员后台</text>
+        <text class="menu-desc">事后抽查</text>
+        <icon name="chevron-right" size="28" color="var(--text-tertiary)" />
+      </view>
+      <view class="glass-list-divider" />
+      <view class="menu-item" bindtap="logoutAdmin">
+        <view class="menu-icon-box box-red">
+          <icon name="arrow-right-from-bracket" size="28" color="#FF3B30" />
+        </view>
+        <text class="menu-title menu-title-danger">退出管理</text>
+      </view>
+    </view>
+  </block>
+
+  <view class="version-info">
+    <text>NTU快递帮 v1.0.0</text>
+  </view>
+
+  <!-- 底部占位，防止 Dock 遮挡 -->
+  <view class="dock-placeholder" />
+</view>

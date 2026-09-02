@@ -1,0 +1,9 @@
+{
+  "name": "saveUserProfile",
+  "version": "1.0.0",
+  "description": "保存用户收货信息",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

@@ -1,0 +1,9 @@
+<view class="glass-list-item" hover-class="glass-list-item-active">
+  <view class="item-leading"><slot name="leading" /></view>
+  <view class="item-content"><slot /></view>
+  <view class="item-trailing">
+    <slot name="trailing" />
+    <icon wx:if="{{arrow}}" name="chevron-right" size="28" color="var(--text-tertiary)" />
+  </view>
+</view>
+<view wx:if="{{showDivider}}" class="glass-list-divider" />

@@ -1,0 +1,155 @@
+<view class="page">
+  <!-- 步骤指示器 -->
+  <view class="step-bar glass">
+    <view class="step-item {{size ? 'done' : 'active'}}">
+      <icon name="{{size ? 'checkmark-circle' : 'shippingbox'}}" size="28" color="{{size ? 'var(--success-color)' : 'var(--primary-color)'}}" fill="{{!!size}}" />
+      <text>选大小</text>
+    </view>
+    <view class="step-line {{locationType ? 'done' : ''}}"></view>
+    <view class="step-item {{locationType ? 'done' : (size ? 'active' : '')}}">
+      <icon name="{{locationType ? 'checkmark-circle' : 'mappin'}}" size="28" color="{{locationType ? 'var(--success-color)' : (size ? 'var(--primary-color)' : 'var(--text-tertiary)')}}" fill="{{!!locationType}}" />
+      <text>选地址</text>
+    </view>
+    <view class="step-line {{size && locationType ? 'done' : ''}}"></view>
+    <view class="step-item {{size && locationType ? 'active' : ''}}">
+      <icon name="doc-text" size="28" color="{{size && locationType ? 'var(--primary-color)' : 'var(--text-tertiary)'}}" />
+      <text>填信息</text>
+    </view>
+  </view>
+
+  <!-- 包裹大小 -->
+  <view class="section-header">包裹大小</view>
+  <view class="glass-list">
+    <view class="select-card {{size === 'small' ? 'selected' : ''}}" bindtap="selectSize" data-size="small">
+      <view class="card-icon-box box-blue">
+        <icon name="cube" size="36" color="#007AFF" fill="{{size === 'small'}}" />
+      </view>
+      <view class="card-info">
+        <text class="card-name">小件</text>
+        <text class="card-desc">信封 / 小盒子</text>
+      </view>
+      <view class="card-trailing">
+        <text class="card-price">¥2.9</text>
+        <icon wx:if="{{size === 'small'}}" name="checkmark-circle" size="32" color="var(--primary-color)" fill="{{true}}" />
+      </view>
+    </view>
+    <view class="glass-list-divider" />
+    <view class="select-card {{size === 'medium' ? 'selected' : ''}}" bindtap="selectSize" data-size="medium">
+      <view class="card-icon-box box-blue">
+        <icon name="shippingbox" size="36" color="#007AFF" fill="{{size === 'medium'}}" />
+      </view>
+      <view class="card-info">
+        <text class="card-name">中件</text>
+        <text class="card-desc">鞋盒大小</text>
+      </view>
+      <view class="card-trailing">
+        <text class="card-price">¥3.9</text>
+        <icon wx:if="{{size === 'medium'}}" name="checkmark-circle" size="32" color="var(--primary-color)" fill="{{true}}" />
+      </view>
+    </view>
+    <view class="glass-list-divider" />
+    <view class="select-card {{size === 'large' ? 'selected' : ''}}" bindtap="selectSize" data-size="large">
+      <view class="card-icon-box box-blue">
+        <icon name="shippingbox" size="40" color="#007AFF" fill="{{size === 'large'}}" />
+      </view>
+      <view class="card-info">
+        <text class="card-name">大件</text>
+        <text class="card-desc">大箱子 / 重物</text>
+      </view>
+      <view class="card-trailing">
+        <text class="card-price">¥4.9</text>
+        <icon wx:if="{{size === 'large'}}" name="checkmark-circle" size="32" color="var(--primary-color)" fill="{{true}}" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 地址类型 -->
+  <view class="section-header" wx:if="{{size}}">取件地址</view>
+  <view class="glass-list" wx:if="{{size}}">
+    <view class="select-card {{locationType === 'onCampus' ? 'selected' : ''}}" bindtap="selectLocation" data-type="onCampus">
+      <view class="card-icon-box box-green">
+        <icon name="building-columns" size="36" color="#34C759" fill="{{locationType === 'onCampus'}}" />
+      </view>
+      <view class="card-info">
+        <text class="card-name">校内</text>
+        <text class="card-desc">校内快递站</text>
+      </view>
+      <view class="card-trailing">
+        <text class="card-price free">不加价</text>
+        <icon wx:if="{{locationType === 'onCampus'}}" name="checkmark-circle" size="32" color="var(--primary-color)" fill="{{true}}" />
+      </view>
+    </view>
+    <view class="glass-list-divider" />
+    <view class="select-card {{locationType === 'offCampus' ? 'selected' : ''}}" bindtap="selectLocation" data-type="offCampus">
+      <view class="card-icon-box box-orange">
+        <icon name="house" size="36" color="#FF9500" fill="{{locationType === 'offCampus'}}" />
+      </view>
+      <view class="card-info">
+        <text class="card-name">校外</text>
+        <text class="card-desc">校外快递点</text>
+      </view>
+      <view class="card-trailing">
+        <text class="card-price">+¥2.0</text>
+        <icon wx:if="{{locationType === 'offCampus'}}" name="checkmark-circle" size="32" color="var(--primary-color)" fill="{{true}}" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 收货信息 -->
+  <view class="section-header" wx:if="{{size && locationType}}">收货信息</view>
+  <view class="glass-list" wx:if="{{size && locationType}}">
+    <view class="form-item">
+      <text class="form-label">收货人</text>
+      <input class="form-input" placeholder="请输入姓名" value="{{recipientName}}" bindinput="onNameInput" maxlength="20" />
+    </view>
+    <view class="glass-list-divider" />
+    <view class="form-item">
+      <text class="form-label">手机号</text>
+      <input class="form-input" type="number" placeholder="请输入手机号" value="{{phone}}" bindinput="onPhoneInput" maxlength="11" />
+    </view>
+    <view class="glass-list-divider" />
+    <view class="form-item">
+      <text class="form-label">取件码</text>
+      <input class="form-input" placeholder="如 A1-3-5" value="{{pickupCode}}" bindinput="onPickupCodeInput" maxlength="50" />
+    </view>
+    <view class="glass-list-divider" />
+    <view class="form-item" bindtap="showZonePicker">
+      <text class="form-label">送达园区</text>
+      <text class="form-input picker-value {{deliveryZone ? '' : 'placeholder'}}">{{deliveryZone || '请选择园区'}}</text>
+      <icon name="chevron-right" size="28" color="var(--text-tertiary)" />
+    </view>
+    <view class="glass-list-divider" />
+    <view class="form-item form-item-textarea">
+      <text class="form-label">备注</text>
+      <textarea class="form-textarea" placeholder="选填，如快递类型、特殊要求等" value="{{remark}}" bindinput="onRemarkInput" maxlength="200" auto-height />
+    </view>
+  </view>
+
+  <!-- 占位 -->
+  <view class="bar-placeholder" wx:if="{{size && locationType}}"></view>
+
+  <!-- 磨砂底部下单栏 -->
+  <view class="glass-bar order-bar" wx:if="{{size && locationType}}">
+    <view class="bar-price">
+      <text class="bar-price-label">合计</text>
+      <text class="bar-price-value">¥{{totalPriceText}}</text>
+    </view>
+    <button class="btn-primary bar-btn" bindtap="submitOrder" loading="{{submitting}}" disabled="{{submitting}}">
+      提交订单
+    </button>
+  </view>
+
+  <!-- 园区选择器 -->
+  <view class="glass-mask" wx:if="{{showZoneModal}}" catchtap="closeZonePicker"></view>
+  <view class="bottom-sheet" wx:if="{{showZoneModal}}">
+    <view class="modal-grip"></view>
+    <view class="zone-title">选择送达园区</view>
+    <scroll-view class="zone-list" scroll-y="true">
+      <view class="zone-item {{deliveryZone === item ? 'selected' : ''}}" wx:for="{{zoneOptions}}" wx:key="*this" bindtap="selectZone" data-zone="{{item}}">
+        <text>{{item}}</text>
+        <icon wx:if="{{deliveryZone === item}}" name="checkmark" size="32" color="var(--primary-color)" />
+      </view>
+    </scroll-view>
+    <button class="btn-primary zone-confirm" bindtap="closeZonePicker">确定</button>
+  </view>
+</view>

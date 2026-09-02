@@ -1,0 +1,9 @@
+{
+  "name": "queryWechatPayOrder",
+  "version": "1.0.0",
+  "description": "微信支付查单确认",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

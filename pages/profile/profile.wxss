@@ -1,0 +1,297 @@
+.page {
+  padding-bottom: 40rpx;
+  min-height: 100vh;
+}
+
+/* 用户头部 Banner */
+.user-banner {
+  padding: 56rpx 40rpx 40rpx;
+  margin-bottom: 8rpx;
+  position: relative;
+}
+
+.user-banner-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar-wrap {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: none;
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: normal;
+}
+
+.avatar-wrap::after {
+  border: none;
+  border-radius: 50%;
+}
+
+.avatar-img {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 50%;
+  display: block;
+}
+
+.avatar-tip {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 20rpx;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6rpx 0;
+  line-height: 1.2;
+}
+
+.user-info {
+  margin-top: 28rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.nickname-input {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: none;
+  width: 100%;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0;
+  text-align: center;
+  letter-spacing: -0.4rpx;
+}
+
+.user-id {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-top: 10rpx;
+  display: block;
+}
+
+.login-btn {
+  margin-top: 28rpx;
+  background: #FFFFFF;
+  color: #007AFF;
+  font-size: 24rpx;
+  font-weight: 600;
+  border-radius: 100rpx;
+  padding: 0 32rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  border: none;
+  align-self: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.12);
+}
+
+.login-btn::after {
+  border: none;
+}
+
+/* 管理员入口提示 */
+.admin-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 20rpx;
+  background: rgba(255, 149, 0, 0.1);
+  color: #FF9500;
+  font-size: 26rpx;
+  margin: 0 32rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* 管理员密码弹窗 */
+.modal-title {
+  text-align: center;
+  padding: 36rpx 36rpx 16rpx;
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-desc {
+  display: block;
+  text-align: center;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-bottom: 24rpx;
+  padding: 0 36rpx;
+}
+
+.password-input {
+  width: calc(100% - 72rpx);
+  margin: 0 36rpx 36rpx;
+}
+
+.modal-btns {
+  display: flex;
+  border-top: 1rpx solid var(--separator-opaque);
+}
+
+.modal-btn {
+  flex: 1;
+  height: 96rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  border-radius: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.modal-btn::after {
+  border: none;
+}
+
+.modal-cancel {
+  color: var(--primary-color);
+  border-right: 1rpx solid var(--separator-opaque);
+}
+
+.modal-confirm {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* 订单状态快捷入口 */
+.status-grid {
+  display: flex;
+  padding: 24rpx 16rpx;
+}
+
+.status-cell {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.status-icon-box {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(120, 120, 128, 0.08);
+  margin-bottom: 8rpx;
+}
+
+.status-count {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.status-label {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  margin-top: 6rpx;
+}
+
+/* 菜单 */
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  transition: background 0.15s ease;
+}
+
+.menu-item:active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.menu-icon-box {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.box-blue { background: rgba(0, 122, 255, 0.12); }
+.box-green { background: rgba(52, 199, 89, 0.12); }
+.box-orange { background: rgba(255, 149, 0, 0.12); }
+.box-purple { background: rgba(175, 82, 222, 0.12); }
+.box-red { background: rgba(255, 59, 48, 0.12); }
+
+.menu-title {
+  flex: 1;
+  font-size: 34rpx;
+  color: var(--text-primary);
+}
+
+.menu-title-danger {
+  color: var(--danger-color);
+}
+
+.menu-desc {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-right: 8rpx;
+}
+
+.menu-action {
+  font-size: 24rpx;
+  color: var(--primary-color);
+  font-weight: 600;
+  background: rgba(0, 122, 255, 0.1);
+  border-radius: 100rpx;
+  padding: 8rpx 24rpx;
+}
+
+.menu-contact-btn {
+  font-size: 24rpx;
+  color: var(--primary-color);
+  font-weight: 600;
+  background: rgba(0, 122, 255, 0.1);
+  border-radius: 100rpx;
+  padding: 8rpx 24rpx;
+  line-height: 1.5;
+  border: none;
+}
+
+.menu-contact-btn::after {
+  border: none;
+}
+
+/* 版本信息 */
+.version-info {
+  text-align: center;
+  padding: 60rpx 0 30rpx;
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+}
+
+.dock-placeholder {
+  height: 140rpx;
+}

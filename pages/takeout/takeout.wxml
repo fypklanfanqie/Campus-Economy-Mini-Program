@@ -1,0 +1,108 @@
+<!-- pages/takeout/takeout.wxml - 校门口外卖代拿下单页（iOS 18 磨砂玻璃风格） -->
+<view class="page">
+  <!-- 外卖位置 -->
+  <view class="section-header">外卖所在校门</view>
+  <view class="glass-list">
+    <view class="gate-grid">
+      <view class="gate-item {{gateLocation === item ? 'selected' : ''}}" wx:for="{{gateOptions}}" wx:key="*this" bindtap="selectGate" data-gate="{{item}}">
+        {{item}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 送达方式 -->
+  <view class="section-header">送达方式</view>
+  <view class="glass-list">
+    <view class="delivery-row {{deliveryType === 'gate' ? 'selected' : ''}}" bindtap="selectDeliveryType" data-type="gate">
+      <view class="delivery-icon">
+        <icon name="building-columns" size="40" color="var(--primary-color)" />
+      </view>
+      <view class="delivery-info">
+        <text class="delivery-name">送到园区门口</text>
+        <text class="delivery-desc">在园区门口取餐</text>
+      </view>
+      <text class="delivery-price">¥{{gateFee}}</text>
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="delivery-row {{deliveryType === 'dorm' ? 'selected' : ''}}" bindtap="selectDeliveryType" data-type="dorm">
+      <view class="delivery-icon">
+        <icon name="house-door" size="40" color="var(--primary-color)" />
+      </view>
+      <view class="delivery-info">
+        <text class="delivery-name">送到宿舍门口</text>
+        <text class="delivery-desc">直接送到宿舍</text>
+      </view>
+      <text class="delivery-price">¥{{dormFee}}</text>
+    </view>
+  </view>
+
+  <!-- 下单信息 -->
+  <view class="section-header" wx:if="{{deliveryType}}">下单信息</view>
+  <view class="glass-list" wx:if="{{deliveryType}}">
+    <view class="form-item">
+      <text class="form-label">收货人</text>
+      <input class="form-input" placeholder="请输入姓名" value="{{recipientName}}" bindinput="onNameInput" maxlength="20" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item">
+      <text class="form-label">手机号</text>
+      <input class="form-input" type="number" placeholder="请输入手机号" value="{{phone}}" bindinput="onPhoneInput" maxlength="11" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item">
+      <text class="form-label">开柜码</text>
+      <input class="form-input" placeholder="选填，取餐柜/取餐码" value="{{lockerCode}}" bindinput="onLockerInput" maxlength="30" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item" bindtap="showZonePicker">
+      <text class="form-label">送达园区</text>
+      <text class="form-input picker-value {{deliveryZone ? '' : 'placeholder'}}">{{deliveryZone || '请选择园区'}}</text>
+      <icon name="chevron-right" size="28" color="var(--text-tertiary)" />
+    </view>
+    <view class="glass-list-divider" wx:if="{{deliveryType === 'dorm'}}"></view>
+    <view class="form-item" wx:if="{{deliveryType === 'dorm'}}">
+      <text class="form-label">宿舍楼</text>
+      <input class="form-input" placeholder="选填，如3栋502" value="{{dormBuilding}}" bindinput="onDormInput" maxlength="30" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item form-item-textarea">
+      <text class="form-label">备注</text>
+      <textarea class="form-textarea" placeholder="选填，如外卖商家、餐品名称等" value="{{remark}}" bindinput="onRemarkInput" maxlength="200" auto-height />
+    </view>
+  </view>
+
+  <!-- 费用明细 -->
+  <view class="section-header" wx:if="{{deliveryType}}">费用明细</view>
+  <view class="glass-list" wx:if="{{deliveryType}}">
+    <view class="info-row">
+      <text class="info-label">配送费（{{deliveryType === 'dorm' ? '宿舍门口' : '园区门口'}}）</text>
+      <text class="info-value">¥{{deliveryType === 'dorm' ? dormFee : gateFee}}</text>
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="info-row price-row">
+      <text class="info-label">合计</text>
+      <text class="price price-large">¥{{totalPriceText}}</text>
+    </view>
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-wrap" wx:if="{{deliveryType}}">
+    <button class="btn-primary submit-btn" bindtap="submitOrder" loading="{{submitting}}" disabled="{{submitting || !canSubmit}}">
+      {{submitting ? '提交中...' : '提交订单（¥' + totalPriceText + '）'}}
+    </button>
+  </view>
+
+  <!-- 园区选择器 -->
+  <view class="glass-mask" wx:if="{{showZoneModal}}" catchtap="closeZonePicker"></view>
+  <view class="bottom-sheet zone-modal" wx:if="{{showZoneModal}}">
+    <view class="modal-grip"></view>
+    <view class="zone-title">选择送达园区</view>
+    <scroll-view class="zone-list" scroll-y="true">
+      <view class="zone-item {{deliveryZone === item ? 'selected' : ''}}" wx:for="{{zoneOptions}}" wx:key="*this" bindtap="selectZone" data-zone="{{item}}">
+        <text>{{item}}</text>
+        <icon wx:if="{{deliveryZone === item}}" name="checkmark" size="32" color="var(--primary-color)" />
+      </view>
+    </scroll-view>
+    <button class="btn-primary zone-confirm" bindtap="closeZonePicker">确定</button>
+  </view>
+</view>

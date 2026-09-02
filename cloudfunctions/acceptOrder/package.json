@@ -1,0 +1,9 @@
+{
+  "name": "acceptOrder",
+  "version": "1.0.0",
+  "description": "骑手接单",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

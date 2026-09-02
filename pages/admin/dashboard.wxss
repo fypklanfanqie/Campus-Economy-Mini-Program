@@ -1,0 +1,433 @@
+/* pages/admin/dashboard.wxss - 管理员后台（iOS 18 磨砂玻璃风格） */
+.page {
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+/* 磨砂返回栏 */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  min-height: 88rpx;
+  padding: 0 24rpx;
+  padding-top: env(safe-area-inset-top);
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+  color: #007AFF;
+  font-size: 30rpx;
+  padding: 12rpx 16rpx 12rpx 0;
+}
+
+.nav-back-chevron {
+  display: inline-block;
+  width: 18rpx;
+  height: 18rpx;
+  border-left: 3rpx solid #007AFF;
+  border-bottom: 3rpx solid #007AFF;
+  transform: rotate(45deg);
+  margin-right: 8rpx;
+}
+
+.nav-title {
+  flex: 1;
+  text-align: center;
+  color: var(--text-primary);
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.nav-placeholder {
+  width: 100rpx;
+}
+
+/* 统计 - 两列卡片 */
+.stat-row {
+  display: flex;
+  gap: 20rpx;
+  padding: 0 32rpx;
+}
+
+.stat-item {
+  flex: 1;
+  padding: 36rpx 24rpx;
+  border-radius: 24rpx;
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+  letter-spacing: -0.5rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-top: 8rpx;
+  display: block;
+}
+
+/* 说明 */
+.note-card {
+  margin: 0 32rpx;
+  border-radius: 24rpx;
+}
+
+.note-row {
+  padding: 28rpx;
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 菜单 */
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx;
+  transition: background 0.15s ease;
+}
+
+.menu-item icon {
+  flex-shrink: 0;
+}
+
+.menu-title {
+  flex: 1;
+  font-size: 34rpx;
+  color: var(--text-primary);
+  margin-left: 24rpx;
+}
+
+/* tab 栏 */
+.tabs-bar {
+  padding: 12rpx 0;
+  margin-top: 8rpx;
+}
+
+.tabs-scroll {
+  white-space: nowrap;
+  padding: 0 20rpx;
+}
+
+.tabs {
+  display: flex;
+  padding: 4rpx;
+}
+
+.tab {
+  display: inline-block;
+  padding: 12rpx 28rpx;
+  margin: 0 6rpx;
+  border-radius: 100rpx;
+  font-size: 26rpx;
+  color: var(--text-primary);
+  background: rgba(120, 120, 128, 0.12);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.tab.active {
+  background: #1C1C1E;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* 订单卡片 */
+.order-list {
+  padding: 8rpx 0 20rpx;
+}
+
+.admin-order {
+  margin: 16rpx 32rpx;
+  padding: 28rpx;
+  border-radius: 24rpx;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid var(--separator-opaque);
+}
+
+.admin-no {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  max-width: 400rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'SF Mono', monospace;
+}
+
+/* 信息网格 */
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx 16rpx;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-label {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  margin-bottom: 6rpx;
+}
+
+.admin-value {
+  font-size: 28rpx;
+  color: var(--text-primary);
+}
+
+.admin-remark {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid var(--separator-opaque);
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+/* 操作按钮 */
+.admin-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20rpx;
+  margin-top: 20rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid var(--separator-opaque);
+}
+
+.action-contact,
+.action-unpaid {
+  font-size: 26rpx;
+  border-radius: 100rpx;
+  padding: 12rpx 32rpx;
+  line-height: 1.5;
+  min-height: 0;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 160rpx 0;
+}
+
+.empty-state icon {
+  margin-bottom: 20rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 36rpx;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+/* 确认弹窗 - center-modal */
+.confirm-modal {
+  padding: 0;
+  overflow: hidden;
+}
+
+.confirm-header {
+  text-align: center;
+  padding: 36rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #FF3B30;
+  border-bottom: 1rpx solid var(--separator-opaque);
+}
+
+.confirm-body {
+  padding: 36rpx;
+}
+
+.confirm-text {
+  display: block;
+  font-size: 30rpx;
+  color: var(--text-primary);
+  margin-bottom: 12rpx;
+}
+
+.confirm-text.sub {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-bottom: 24rpx;
+}
+
+.confirm-highlight {
+  color: #FF3B30;
+  font-family: 'SF Mono', monospace;
+  font-weight: 600;
+}
+
+.blacklist-label {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: var(--text-primary);
+  margin-top: 12rpx;
+}
+
+.blacklist-label checkbox {
+  margin-right: 12rpx;
+  transform: scale(0.9);
+}
+
+.confirm-btns {
+  display: flex;
+  border-top: 1rpx solid var(--separator-opaque);
+}
+
+.confirm-btn {
+  flex: 1;
+  height: 96rpx;
+  font-size: 32rpx;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-btn::after {
+  border: none;
+}
+
+.confirm-cancel {
+  color: #007AFF;
+  border-right: 1rpx solid var(--separator-opaque);
+}
+
+.confirm-danger {
+  color: #FF3B30;
+  background: transparent;
+  font-weight: 600;
+}
+
+/* 提现审核弹窗 - bottom-sheet */
+.withdraw-modal {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.modal-grip {
+  width: 64rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+  background: rgba(60, 60, 67, 0.3);
+  margin: 0 auto 20rpx;
+}
+
+.withdraw-header {
+  text-align: center;
+  padding: 8rpx 0 24rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 1rpx solid var(--separator-opaque);
+}
+
+.withdraw-list {
+  flex: 1;
+  padding: 24rpx 0;
+  max-height: 50vh;
+}
+
+.withdraw-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 28rpx;
+  padding: 80rpx 0;
+}
+
+.withdraw-card {
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.withdraw-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.withdraw-amount {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.withdraw-status {
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.wd-pending { color: #FF9500; }
+.wd-completed { color: #34C759; }
+.wd-rejected { color: var(--text-secondary); }
+
+.withdraw-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.withdraw-info text {
+  padding: 4rpx 0;
+}
+
+.withdraw-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20rpx;
+  margin-top: 16rpx;
+}
+
+.wd-action {
+  font-size: 26rpx;
+  border-radius: 100rpx;
+  padding: 12rpx 36rpx;
+  line-height: 1.5;
+  min-height: 0;
+}
+
+.withdraw-close {
+  margin: 8rpx 0 0;
+  height: 88rpx;
+  font-size: 30rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}

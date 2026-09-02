@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>iOS 图标预览 · SF Symbols 风格</title>
+<style>
+  :root {
+    --bg: #F2F2F7;
+    --card: rgba(255,255,255,0.78);
+    --text: #1C1C1E;
+    --sub: #8E8E93;
+    --blue: #007AFF;
+    --green: #34C759;
+    --orange: #FF9500;
+    --red: #FF3B30;
+    --purple: #AF52DE;
+    --sep: rgba(60,60,67,0.18);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px 24px 80px;
+    background: linear-gradient(180deg, #E8F1FF 0%, #F2F2F7 40%, #FFF5F8 100%);
+    background-attachment: fixed;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', sans-serif;
+    color: var(--text);
+  }
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.4px; margin: 0 0 6px; }
+  .lead { color: var(--sub); font-size: 14px; margin: 0 0 28px; max-width: 720px; line-height: 1.6; }
+  .group { margin: 0 0 28px; }
+  .group h2 { font-size: 13px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 0.6px; margin: 0 0 12px 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--card); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.5); border-radius: 18px;
+    padding: 14px 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  }
+  .name { font-size: 13px; font-weight: 600; margin-bottom: 10px; font-family: ui-monospace, 'SF Mono', Menlo, monospace; }
+  .row { display: flex; align-items: center; gap: 14px; }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .cell .lbl { font-size: 10px; color: var(--sub); }
+  .tile {
+    width: 44px; height: 44px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tile.neutral { background: rgba(120,120,128,0.10); }
+  .tile.blue { background: rgba(0,122,255,0.12); }
+  .tile.orange { background: rgba(255,149,0,0.12); }
+  .tile.green { background: rgba(52,199,89,0.12); }
+  .tile.purple { background: rgba(175,82,222,0.12); }
+  .swatches { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--sep); }
+  .swatches img { width: 22px; height: 22px; }
+  .na { color: var(--sub); font-size: 11px; height: 44px; display: flex; align-items: center; }
+  code { background: rgba(120,120,128,0.12); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>iOS 图标预览</h1>
+<p class="lead">
+  本页镜像 <code>components/icon/icon.js</code> 的 ICONS 数据，用于肉眼 QA。
+  每个图标展示 <b>outline</b>（默认）与 <b>fill</b>（选中态/磁贴）两种模式，外加几种 iOS 系统色描边。
+  fill 缺省的纯字形图标以「—」表示。在浏览器中查看几何是否贴合 SF Symbols。
+</p>
+<div id="app"></div>
+
+<script>
+const ICONS = {
+  house: { o:'<path d="M3.5 11.5L12 4l8.5 7.5"/><path d="M6 10v10h4v-6h4v6h4V10"/>', f:'<path fill="__C__" fill-rule="evenodd" d="M12 3.2L20.8 11.4H18.8V20H14.4V14H9.6V20H5.2V11.4H3.2zM9.6 14h4.8v6H9.6z"/>' },
+  'doc-plaintext': { o:'<path d="M14.5 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5z"/><path d="M14.5 3v5.5H19"/><path d="M9 13h6M9 16.5h6M9 9.5h3"/>', f:'<path fill="__C__" fill-rule="evenodd" d="M7 3h7.5L19 7.5V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM9 12.3h6v1.7H9zM9 15.8h6v1.7H9zM9 8.8h3.2v1.7H9z"/>' },
+  person: { o:'<circle cx="12" cy="8" r="4.2"/><path d="M5 20a7 7 0 0 1 14 0"/>', f:'<circle fill="__C__" cx="12" cy="8" r="4.3"/><path fill="__C__" d="M4.8 20.5a7.2 7.2 0 0 1 14.4 0z"/>' },
+  shippingbox: { o:'<path d="M12 2.6L20.5 7.1V16.9L12 21.4 3.5 16.9V7.1z"/><path d="M3.5 7.1L12 11.6l8.5-4.5"/><path d="M12 11.6v9.8"/>', f:'<path fill="__C__" d="M12 2.6L20.5 7.1L12 11.6L3.5 7.1z"/><path fill="__C__" fill-opacity="0.8" d="M20.5 7.1L12 11.6L12 21.4L20.5 16.9z"/><path fill="__C__" fill-opacity="0.6" d="M3.5 7.1L12 11.6L12 21.4L3.5 16.9z"/>' },
+  printer: { o:'<path d="M6 9V3.5h12V9"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 17v3.5h10V17" stroke-opacity="0.55"/><path d="M8.5 13h7" stroke-opacity="0.55"/>', f:'<path fill="__C__" d="M6 3.5h12V9H6z"/><rect fill="__C__" x="4" y="9" width="16" height="8" rx="2"/><path fill="__C__" fill-opacity="0.5" d="M7 17h10v3.5H7z"/>' },
+  takeoutbag: { o:'<path d="M5.5 8h13l-1 12.5a1.5 1.5 0 0 1-1.5 1.4H8a1.5 1.5 0 0 1-1.5-1.4z"/><path d="M8.5 8V5.5a3.5 3.5 0 0 1 7 0V8" stroke-opacity="0.6"/><path d="M5.5 11.5h13" stroke-opacity="0.45"/>', f:'<path fill="__C__" fill-rule="evenodd" d="M5.5 8h13l-1 12.5a1.5 1.5 0 0 1-1.5 1.4H8a1.5 1.5 0 0 1-1.5-1.4zM8.6 8V5.5a3.4 3.4 0 0 1 6.8 0V8h-2V5.6a1.4 1.4 0 0 0-2.8 0V8z"/>' },
+  'fork-knife': { o:'<path d="M6 3v4a2 2 0 0 0 4 0V3"/><path d="M8 7v14"/><path d="M16 3c-1.8 0-2.8 2-2.8 4.5S14.2 12 16 12v9"/>', f:'<path fill="__C__" d="M6 3v4a2 2 0 0 0 4 0V3z"/><rect fill="__C__" x="7.4" y="7" width="1.2" height="14"/><path fill="__C__" d="M16 3c-1.8 0-2.8 2-2.8 4.5S14.2 12 16 12v9h-1.2V3z"/>' },
+  bicycle: { o:'<circle cx="6" cy="17" r="3.2"/><circle cx="18" cy="17" r="3.2"/><path d="M6 17l3.5-6.5h6L18 17"/><path d="M9.5 10.5l-1.2-3h-2"/><path d="M14 11l3 6"/>', f:'<g stroke="__C__" stroke-width="2.7" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="17" r="3.2"/><circle cx="18" cy="17" r="3.2"/><path d="M6 17l3.5-6.5h6L18 17"/><path d="M9.5 10.5l-1.2-3h-2"/><path d="M14 11l3 6"/></g>' },
+  clock: { o:'<circle cx="12" cy="12" r="8.5"/><path d="M12 12V7.5M12 12l3.2 1.8"/>', f:'<circle fill="__C__" cx="12" cy="12" r="10.5"/><path d="M12 12V7.5M12 12l3.2 1.8" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' },
+  'checkmark-circle': { o:'<circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.4 2.4 4.6-5.2"/>', f:'<circle fill="__C__" cx="12" cy="12" r="10.5"/><path d="M8 12.2l2.6 2.6 5-5.6" stroke="#FFFFFF" stroke-width="2.4" fill="none"/>' },
+  'checkmark-seal': { o:'<path d="M12 2.5l1.8 1.3 2.2-.4 1 2 2 1-.4 2.2 1.3 1.8-1.3 1.8.4 2.2-2 1-1 2-2.2-.4L12 21.5l-1.8-1.3-2.2.4-1-2-2-1 .4-2.2L4.1 12l1.3-1.8-.4-2.2 2-1 1-2 2.2.4z"/><path d="M9 12l2 2 4-4.5"/>', f:'<path fill="__C__" d="M12 2.5l1.8 1.3 2.2-.4 1 2 2 1-.4 2.2 1.3 1.8-1.3 1.8.4 2.2-2 1-1 2-2.2-.4L12 21.5l-1.8-1.3-2.2.4-1-2-2-1 .4-2.2L4.1 12l1.3-1.8-.4-2.2 2-1 1-2 2.2.4z"/><path d="M9 12l2 2 4-4.5" stroke="#FFFFFF" stroke-width="2.2" fill="none"/>' },
+  'xmark-circle': { o:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5"/>', f:'<circle fill="__C__" cx="12" cy="12" r="10.5"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5" stroke="#FFFFFF" stroke-width="2.4" fill="none"/>' },
+  'exclamationmark-circle': { o:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><path d="M12 16h.01"/>', f:'<circle fill="__C__" cx="12" cy="12" r="10.5"/><path d="M12 7.5v5" stroke="#FFFFFF" stroke-width="2.2" fill="none"/><circle fill="#FFFFFF" cx="12" cy="16" r="1.2"/>' },
+  phone: { o:'<path d="M5 4h3l1.5 4-2 1.5a12 12 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>', f:'<path fill="__C__" d="M5 4h3l1.5 4-2 1.5a12 12 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>' },
+  bubble: { o:'<path d="M4 8.5A4.5 4.5 0 0 1 8.5 4h7A4.5 4.5 0 0 1 20 8.5v4A4.5 4.5 0 0 1 15.5 17H11l-4 3v-3h-.5A4.5 4.5 0 0 1 4 12.5z"/><path d="M8 10.5h8M8 13.5h4" stroke-opacity="0.55"/>', f:'<path fill="__C__" fill-rule="evenodd" d="M4 8.5A4.5 4.5 0 0 1 8.5 4h7A4.5 4.5 0 0 1 20 8.5v4A4.5 4.5 0 0 1 15.5 17H11l-4 3v-3h-.5A4.5 4.5 0 0 1 4 12.5zM8 9.8h8v1.7H8zM8 12.8h4v1.7H8z"/>' },
+  gear: { o:'<path d="M22.2 12L19.95 8.71L19.21 4.79L15.29 4.05L12 1.8L8.71 4.05L4.79 4.79L4.05 8.71L1.8 12L4.05 15.29L4.79 19.21L8.71 19.95L12 22.2L15.29 19.95L19.21 19.21L19.95 15.29z"/><circle cx="12" cy="12" r="3"/>', f:'<path fill="__C__" fill-rule="evenodd" d="M22.2 12L19.95 8.71L19.21 4.79L15.29 4.05L12 1.8L8.71 4.05L4.79 4.79L4.05 8.71L1.8 12L4.05 15.29L4.79 19.21L8.71 19.95L12 22.2L15.29 19.95L19.21 19.21L19.95 15.29zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>' },
+  'arrow-right-from-bracket': { o:'<path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M16 12H8"/><path d="M13 8l3 4-3 4"/>', f:'<path fill="__C__" d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4z"/><rect fill="__C__" x="7.5" y="11.2" width="8.5" height="1.6"/><path fill="__C__" d="M12.5 7.8l4 4.2-4 4.2z"/>' },
+  mappin: { o:'<path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>', f:'<path fill="__C__" fill-rule="evenodd" d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>' },
+  wallet: { o:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18" stroke-opacity="0.55"/><circle cx="17" cy="14.5" r="1.4" stroke-opacity="0.7"/>', f:'<rect fill="__C__" x="3" y="6" width="18" height="13" rx="2.5"/><path fill="#FFFFFF" fill-opacity="0.4" d="M3 9.4h18v1.3H3z"/><circle fill="#FFFFFF" fill-opacity="0.75" cx="17" cy="14.5" r="1.5"/>' },
+  'doc-text': { o:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6M9 9.5h3"/>', f:'<path fill="__C__" fill-rule="evenodd" d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM9 12.5h6v1.6H9zM9 16h6v1.6H9zM9 9h3v1.6H9z"/>' },
+  'doc-on-doc': { o:'<path d="M9 7V6a2 2 0 0 1 2-2h5l4 4v8a2 2 0 0 1-2 2h-1" stroke-opacity="0.5"/><rect x="3.5" y="7" width="12" height="13" rx="2"/><path d="M10 12h4M10 15.5h4" stroke-opacity="0.55"/>', f:'<path fill="__C__" fill-opacity="0.5" d="M9 7V6a2 2 0 0 1 2-2h5l4 4v8a2 2 0 0 1-2 2h-2V9l-5-5h-2v3z"/><rect fill="__C__" x="3.5" y="7" width="12" height="13" rx="2"/><path fill="#FFFFFF" fill-opacity="0.45" d="M10 11.8h4v1.4h-4zM10 14.8h4v1.4h-4z"/>' },
+  'building-columns': { o:'<path d="M3 9.5L12 4l9 5.5"/><path d="M4 9.5h16"/><path d="M5.5 9.5v9M9.5 9.5v9M14.5 9.5v9M18.5 9.5v9" stroke-opacity="0.6"/><path d="M3.5 19.5h17"/><path d="M3 21.5h18"/>', f:'<path fill="__C__" d="M3 9.5L12 4l9 5.5z"/><rect fill="__C__" x="3.2" y="9" width="17.6" height="1.4"/><path fill="__C__" fill-opacity="0.55" d="M5.2 10.4h1.6v8.4h-1.6zM9.2 10.4h1.6v8.4h-1.6zM13.2 10.4h1.6v8.4h-1.6zM17.2 10.4h1.6v8.4h-1.6z"/><rect fill="__C__" x="3" y="18.8" width="18" height="1.4"/><rect fill="__C__" x="2.4" y="20.8" width="19.2" height="1.4"/>' },
+  'house-door': { o:'<path d="M3.5 11.5L12 4l8.5 7.5"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/>', f:'<path fill="__C__" fill-rule="evenodd" d="M12 3.2L20.8 11.4H18.8V20H14.4V15H9.6V20H5.2V11.4H3.2zM10.2 15h3.6v5h-3.6z"/>' },
+  cube: { o:'<path d="M12 2.5l8 4.5v9l-8 4.5-8-4.5v-9z"/><path d="M4 7l8 4.5L20 7"/>', f:'<path fill="__C__" d="M12 2.5l8 4.5v9l-8 4.5-8-4.5v-9z"/>' },
+  banknote: { o:'<rect x="2.5" y="6.5" width="19" height="11" rx="2"/><circle cx="8" cy="12" r="2.2" stroke-opacity="0.6"/><circle cx="16" cy="12" r="2.2" stroke-opacity="0.6"/>' },
+  plus: { o:'<path d="M12 5v14M5 12h14"/>' },
+  checkmark: { o:'<path d="M4 12.5l5 5 11-11"/>' },
+  xmark: { o:'<path d="M7 7l10 10M17 7L7 17"/>' },
+  'chevron-right': { o:'<path d="M9.5 6l6 6-6 6"/>' },
+  minus: { o:'<path d="M5 12h14"/>' },
+  trash: { o:'<path d="M4 6.5h16"/><path d="M9 6.5V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1.5"/><path d="M6.5 6.5l.8 12.5a1.5 1.5 0 0 0 1.5 1.4h6.4a1.5 1.5 0 0 0 1.5-1.4l.8-12.5"/><path d="M10 10.5v6.5M14 10.5v6.5" stroke-opacity="0.55"/>' },
+  pencil: { o:'<path d="M15 4l5 5-11 11H4v-5z"/><path d="M13 6l5 5"/>' },
+  location: { o:'<path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>' },
+  magnifyingglass: { o:'<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/>' },
+  bell: { o:'<path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7z"/><path d="M10 20a2 2 0 0 0 4 0"/>' }
+};
+
+const GROUPS = [
+  { title: '导航 / 品牌', names: ['house','doc-plaintext','person'] },
+  { title: '服务类型', names: ['shippingbox','printer','takeoutbag','fork-knife','bicycle'] },
+  { title: '状态 / 徽标', names: ['clock','checkmark-circle','checkmark-seal','xmark-circle','exclamationmark-circle'] },
+  { title: '联系 / 设置', names: ['phone','bubble','gear','arrow-right-from-bracket','mappin','wallet'] },
+  { title: '文档', names: ['doc-text','doc-on-doc'] },
+  { title: '地址 / 建筑', names: ['building-columns','house-door','cube','banknote'] },
+  { title: '纯字形 / 杂项', names: ['plus','checkmark','xmark','chevron-right','minus','trash','pencil','location','magnifyingglass','bell'] }
+];
+
+const COLORS = [['#007AFF','blue'],['#34C759','green'],['#FF9500','orange'],['#FF3B30','red'],['#AF52DE','purple']];
+
+function resolveWeight(weight, size){
+  if(weight===0||weight==='0'||weight==null||weight===''){ const s=parseFloat(size); if(isNaN(s)||s<=30)return 2.0; if(s<=50)return 1.85; return 1.7; }
+  return Number(weight)||2;
+}
+function buildSrc(name,color,weight,fill,size){
+  const entry=ICONS[name]; if(!entry)return '';
+  const useFill=!!fill&&!!entry.f;
+  const inner=useFill?entry.f.replace(/__C__/g,color):entry.o;
+  const caps=' stroke-linecap="round" stroke-linejoin="round"';
+  const common='xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"';
+  let svg;
+  if(useFill){ svg='<svg '+common+' fill="none" stroke="none"'+caps+'>'+inner+'</svg>'; }
+  else { const w=resolveWeight(weight,size); svg='<svg '+common+' fill="none" stroke="'+color+'" stroke-width="'+w+'"'+caps+'>'+inner+'</svg>'; }
+  return 'data:image/svg+xml;base64,'+btoa(svg);
+}
+
+function tile(name, fill, tileClass){
+  const src = buildSrc(name, '#007AFF', 0, fill, 44);
+  return '<div class="tile '+tileClass+'"><img src="'+src+'" style="width:28px;height:28px" /></div>';
+}
+function card(name){
+  const hasF = !!ICONS[name].f;
+  const outSrc = buildSrc(name,'#007AFF',0,false,44);
+  const fillSrc = hasF ? buildSrc(name,'#007AFF',0,true,44) : '';
+  let swatches = COLORS.map(function(c){
+    return '<img src="'+buildSrc(name,c[0],0,false,22)+'" style="width:22px;height:22px" />';
+  }).join('');
+  return '<div class="card">'
+    + '<div class="name">'+name+'</div>'
+    + '<div class="row">'
+      + '<div class="cell"><div class="tile neutral"><img src="'+outSrc+'" style="width:28px;height:28px" /></div><span class="lbl">outline</span></div>'
+      + (hasF
+          ? '<div class="cell"><div class="tile blue"><img src="'+fillSrc+'" style="width:28px;height:28px" /></div><span class="lbl">fill</span></div>'
+          : '<div class="cell"><div class="na">—</div><span class="lbl">fill</span></div>')
+    + '</div>'
+    + '<div class="swatches">'+swatches+'</div>'
+    + '</div>';
+}
+
+const app = document.getElementById('app');
+let html = '';
+GROUPS.forEach(function(g){
+  html += '<div class="group"><h2>'+g.title+'</h2><div class="grid">';
+  g.names.forEach(function(n){ html += card(n); });
+  html += '</div></div>';
+});
+app.innerHTML = html;
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<image
+  wx:if="{{_src}}"
+  class="ios-icon"
+  src="{{_src}}"
+  mode="aspectFit"
+  style="width:{{size}}rpx; height:{{size}}rpx;"
+/>

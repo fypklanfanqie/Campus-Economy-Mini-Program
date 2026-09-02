@@ -1,0 +1,8 @@
+.glass-list {
+  background: var(--bg-glass);
+  backdrop-filter: saturate(180%) blur(40rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(40rpx);
+  border-radius: 28rpx;
+  overflow: hidden;
+  border: 1rpx solid rgba(255, 255, 255, 0.12);
+}

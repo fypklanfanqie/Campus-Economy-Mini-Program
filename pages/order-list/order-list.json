@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "icon": "/components/icon/icon",
+    "status-tag": "/components/status-tag/status-tag"
+  },
+  "navigationBarTitleText": "我的订单",
+  "enablePullDownRefresh": true
+}

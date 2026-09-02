@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "icon": "/components/icon/icon",
+    "status-tag": "/components/status-tag/status-tag"
+  },
+  "navigationBarTitleText": "管理员后台",
+  "navigationBarBackgroundColor": "#333333"
+}

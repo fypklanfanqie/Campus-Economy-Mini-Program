@@ -1,0 +1,175 @@
+/* pages/order-detail/order-detail.wxss - 订单详情样式（iOS 18 磨砂玻璃风格） */
+.page {
+  padding-bottom: 40rpx;
+  min-height: 100vh;
+}
+
+.loading-wrap {
+  text-align: center;
+  padding: 200rpx 0;
+  color: var(--text-secondary);
+}
+
+/* 状态区 */
+.status-section {
+  text-align: center;
+  padding: 56rpx 32rpx 44rpx;
+  margin: 24rpx 32rpx 8rpx;
+}
+
+.status-icon {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 0 auto 20rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-icon-pending_payment,
+.status-icon-pending_pickup { background: rgba(255, 149, 0, 0.12); }
+.status-icon-accepted { background: rgba(0, 122, 255, 0.12); }
+.status-icon-delivering { background: rgba(52, 199, 89, 0.12); }
+.status-icon-completed { background: rgba(175, 82, 222, 0.12); }
+.status-icon-cancelled { background: rgba(142, 142, 147, 0.12); }
+
+.status-text {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.status-desc {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-top: 10rpx;
+}
+
+/* 信息行 */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26rpx 28rpx;
+}
+
+.info-label {
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.info-value {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  text-align: right;
+  max-width: 440rpx;
+  word-break: break-all;
+}
+
+.info-value-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  max-width: 460rpx;
+}
+
+.info-value-wrap .info-value {
+  max-width: 400rpx;
+}
+
+.copy-icon {
+  flex-shrink: 0;
+}
+
+.info-value.selectable {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.info-value.link {
+  color: #007AFF;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.price-row {
+  padding-top: 30rpx;
+  padding-bottom: 30rpx;
+}
+
+.price-row .price {
+  color: var(--danger-color);
+}
+
+/* 送达照片 */
+.photo-card {
+  padding: 28rpx;
+}
+
+.photo-frame {
+  border-radius: 20rpx;
+  overflow: hidden;
+  border: 1rpx solid rgba(255, 255, 255, 0.4);
+  background: rgba(120, 120, 128, 0.08);
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.delivery-photo {
+  width: 100%;
+  display: block;
+}
+
+.photo-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-top: 18rpx;
+}
+
+/* 底部操作栏 */
+.action-wrap {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx 32rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+}
+
+.pay-btn {
+  flex: 1;
+  height: 92rpx;
+  font-size: 32rpx;
+}
+
+.pay-btn::after {
+  border: none;
+}
+
+.btn-cancel {
+  width: 240rpx;
+  height: 92rpx;
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  border: 2rpx solid var(--separator);
+}
+
+.btn-cancel::after {
+  border: none;
+}
+
+.return-btn,
+.contact-btn {
+  flex: 1;
+  height: 92rpx;
+  font-size: 32rpx;
+}
+
+.bar-placeholder {
+  height: 180rpx;
+}

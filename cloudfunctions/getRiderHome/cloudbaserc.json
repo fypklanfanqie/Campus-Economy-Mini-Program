@@ -1,0 +1,13 @@
+{
+  "$schema": "https://static.cloudbase.net/cli/cloudbaserc.schema.json",
+  "envId": "cloud1-d4gzs5kp06809bf42",
+  "functionRoot": ".",
+  "functions": [
+    {
+      "name": "getRiderHome",
+      "timeout": 30,
+      "runtime": "Nodejs20.19",
+      "handler": "index.main"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "confirmPayment",
+  "version": "1.0.0",
+  "description": "确认付款（信任模式自动确认）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

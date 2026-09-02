@@ -1,0 +1,9 @@
+{
+  "name": "createWechatPayOrder",
+  "version": "1.0.0",
+  "description": "微信支付统一下单",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

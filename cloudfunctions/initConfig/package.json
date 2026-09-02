@@ -1,0 +1,9 @@
+{
+  "name": "initConfig",
+  "version": "1.0.0",
+  "description": "初始化 paymentConfig 的 config 文档",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

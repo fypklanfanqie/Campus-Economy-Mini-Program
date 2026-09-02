@@ -1,0 +1,36 @@
+.glass-list-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx;
+  min-height: 96rpx;
+  transition: background 0.15s ease;
+}
+
+.glass-list-item-active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.item-leading {
+  margin-right: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.item-trailing {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.glass-list-divider {
+  height: 1rpx;
+  background: var(--separator);
+  margin-left: 84rpx;
+}

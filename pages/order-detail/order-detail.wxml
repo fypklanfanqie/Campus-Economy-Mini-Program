@@ -1,0 +1,283 @@
+<!-- pages/order-detail/order-detail.wxml - 订单详情页（iOS 18 磨砂玻璃风格） -->
+<view class="page">
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text>加载中…</text>
+  </view>
+
+  <block wx:if="{{!loading && order._id}}">
+    <!-- 状态区 -->
+    <view class="status-section glass-card">
+      <view class="status-icon status-icon-{{order.status}}">
+        <icon wx:if="{{order.status === 'pending_payment'}}" name="clock" size="72" color="#FF9500" weight="1.8" />
+        <icon wx:elif="{{order.status === 'pending_pickup'}}" name="clock" size="72" color="#FF9500" weight="1.8" />
+        <icon wx:elif="{{order.status === 'accepted'}}" name="checkmark-circle" size="72" color="#007AFF" weight="1.8" />
+        <icon wx:elif="{{order.status === 'delivering'}}" name="bicycle" size="72" color="#34C759" weight="1.8" />
+        <icon wx:elif="{{order.status === 'completed'}}" name="checkmark-seal" size="72" color="#AF52DE" weight="1.8" />
+        <icon wx:elif="{{order.status === 'cancelled'}}" name="xmark-circle" size="72" color="#8E8E93" weight="1.8" />
+      </view>
+      <view class="status-text">{{statusTextMap[order.status]}}</view>
+      <view class="status-desc">{{statusDescMap[order.status]}}</view>
+    </view>
+
+    <!-- 订单基本信息 -->
+    <view class="section-header">订单信息</view>
+    <view class="glass-list">
+      <view class="info-row">
+        <text class="info-label">订单编号</text>
+        <view class="info-value-wrap">
+          <text class="info-value selectable">{{order._id}}</text>
+          <icon class="copy-icon" name="doc-on-doc" size="30" color="#007AFF" />
+        </view>
+      </view>
+      <view class="glass-list-divider"></view>
+      <view class="info-row">
+        <text class="info-label">创建时间</text>
+        <text class="info-value">{{order.createTimeText}}</text>
+      </view>
+      <view class="glass-list-divider" wx:if="{{order.payTime}}"></view>
+      <view class="info-row" wx:if="{{order.payTime}}">
+        <text class="info-label">付款时间</text>
+        <text class="info-value">{{order.payTimeText}}</text>
+      </view>
+    </view>
+
+    <!-- 外卖代拿信息 -->
+    <block wx:if="{{isTakeout}}">
+      <view class="section-header">外卖代拿</view>
+      <view class="glass-list">
+        <view class="info-row">
+          <text class="info-label">外卖校门</text>
+          <text class="info-value">{{order.gateLocation || '——'}}</text>
+        </view>
+        <view class="glass-list-divider" wx:if="{{order.lockerCode}}"></view>
+        <view class="info-row" wx:if="{{order.lockerCode}}">
+          <text class="info-label">开柜码</text>
+          <view class="info-value-wrap">
+            <text class="info-value selectable">{{order.lockerCode}}</text>
+            <icon class="copy-icon" name="doc-on-doc" size="30" color="#007AFF" />
+          </view>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">送达方式</text>
+          <text class="info-value">{{order.deliveryType === 'dorm' ? '送到宿舍门口' : '送到园区门口'}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">送达园区</text>
+          <text class="info-value">{{order.deliveryZone || '——'}}</text>
+        </view>
+        <view class="glass-list-divider" wx:if="{{order.dormBuilding}}"></view>
+        <view class="info-row" wx:if="{{order.dormBuilding}}">
+          <text class="info-label">宿舍楼</text>
+          <text class="info-value">{{order.dormBuilding}}</text>
+        </view>
+        <view class="glass-list-divider" wx:if="{{order.remark}}"></view>
+        <view class="info-row" wx:if="{{order.remark}}">
+          <text class="info-label">备注</text>
+          <text class="info-value">{{order.remark}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row price-row">
+          <text class="info-label">订单金额</text>
+          <text class="price price-large">¥{{order.price}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 打印文件信息 -->
+    <block wx:elif="{{isPrint}}">
+      <view class="section-header">打印文件</view>
+      <view class="glass-list">
+        <view class="info-row">
+          <text class="info-label">文件名称</text>
+          <text class="info-value">{{order.fileName}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">文件类型</text>
+          <text class="info-value">{{order.fileType || '未知'}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">打印页数</text>
+          <text class="info-value">{{order.filePages}} 页</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">打印份数</text>
+          <text class="info-value">{{order.copies || 1}} 份</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">送达园区</text>
+          <text class="info-value">{{order.deliveryZone || '——'}}</text>
+        </view>
+        <view class="glass-list-divider" wx:if="{{order.remark}}"></view>
+        <view class="info-row" wx:if="{{order.remark}}">
+          <text class="info-label">备注</text>
+          <text class="info-value">{{order.remark}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">预览文件</text>
+          <view class="info-value link" bindtap="previewFile">
+            <text>点击预览</text>
+            <icon name="chevron-right" size="26" color="#007AFF" />
+          </view>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row price-row">
+          <text class="info-label">订单金额</text>
+          <text class="price price-large">¥{{order.price}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 校内商家代取餐信息 -->
+    <block wx:elif="{{isSelfpick}}">
+      <view class="section-header">校内代取餐</view>
+      <view class="glass-list">
+        <view class="info-row">
+          <text class="info-label">取餐商家</text>
+          <text class="info-value">{{order.merchantLocation || '——'}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">取餐码</text>
+          <view class="info-value-wrap">
+            <text class="info-value selectable">{{order.pickupCode}}</text>
+            <icon class="copy-icon" name="doc-on-doc" size="30" color="#007AFF" />
+          </view>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">送达园区</text>
+          <text class="info-value">{{order.deliveryZone || '——'}}</text>
+        </view>
+        <view class="glass-list-divider" wx:if="{{order.remark}}"></view>
+        <view class="info-row" wx:if="{{order.remark}}">
+          <text class="info-label">备注</text>
+          <text class="info-value">{{order.remark}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row price-row">
+          <text class="info-label">订单金额</text>
+          <text class="price price-large">¥{{order.price}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 包裹信息 -->
+    <block wx:else>
+      <view class="section-header">包裹信息</view>
+      <view class="glass-list">
+        <view class="info-row">
+          <text class="info-label">包裹大小</text>
+          <text class="info-value">{{sizeTextMap[order.packageSize]}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">地址类型</text>
+          <text class="info-value">{{order.locationType === 'offCampus' ? '校外（含附加费）' : '校内'}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row">
+          <text class="info-label">取件码</text>
+          <view class="info-value-wrap">
+            <text class="info-value selectable">{{order.pickupCode}}</text>
+            <icon class="copy-icon" name="doc-on-doc" size="30" color="#007AFF" />
+          </view>
+        </view>
+        <view class="glass-list-divider" wx:if="{{order.deliveryZone}}"></view>
+        <view class="info-row" wx:if="{{order.deliveryZone}}">
+          <text class="info-label">送达园区</text>
+          <text class="info-value">{{order.deliveryZone}}</text>
+        </view>
+        <view class="glass-list-divider" wx:if="{{order.remark}}"></view>
+        <view class="info-row" wx:if="{{order.remark}}">
+          <text class="info-label">备注</text>
+          <text class="info-value">{{order.remark}}</text>
+        </view>
+        <view class="glass-list-divider"></view>
+        <view class="info-row price-row">
+          <text class="info-label">订单金额</text>
+          <text class="price price-large">¥{{order.price}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 收货信息 -->
+    <view class="section-header">收货人</view>
+    <view class="glass-list">
+      <view class="info-row">
+        <text class="info-label">姓名</text>
+        <text class="info-value">{{order.recipientName}}</text>
+      </view>
+      <view class="glass-list-divider"></view>
+      <view class="info-row">
+        <text class="info-label">手机号</text>
+        <view class="info-value-wrap">
+          <text class="info-value selectable">{{order.phone}}</text>
+          <icon class="copy-icon" name="doc-on-doc" size="30" color="#007AFF" />
+        </view>
+      </view>
+    </view>
+
+    <!-- 接单员信息 -->
+    <block wx:if="{{order.acceptedBy && order.status !== 'pending_payment'}}">
+      <view class="section-header">接单员</view>
+      <view class="glass-list">
+        <view class="info-row">
+          <text class="info-label">接单员</text>
+          <text class="info-value">{{order.acceptedByName || '工作人员'}}</text>
+        </view>
+        <view class="glass-list-divider" wx:if="{{order.acceptedByPhone}}"></view>
+        <view class="info-row" wx:if="{{order.acceptedByPhone}}">
+          <text class="info-label">联系电话</text>
+          <view class="info-value-wrap">
+            <text class="info-value selectable">{{order.acceptedByPhone}}</text>
+            <icon class="copy-icon" name="doc-on-doc" size="30" color="#007AFF" />
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 送达照片 -->
+    <block wx:if="{{order.status === 'completed' && order.deliveryPhotoUrl}}">
+      <view class="section-header">送达照片</view>
+      <view class="glass-list photo-card">
+        <view class="photo-frame">
+          <image
+            class="delivery-photo"
+            src="{{order.deliveryPhotoUrl}}"
+            mode="widthFix"
+            bindtap="previewDeliveryPhoto"
+            show-menu-by-longpress="{{true}}"
+          ></image>
+        </view>
+        <view class="photo-tip">
+          <icon name="checkmark-seal" size="26" color="#34C759" />
+          <text>骑手已送达，点击可查看大图</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 底部操作栏 -->
+    <view class="glass-bar action-wrap" wx:if="{{order.status === 'pending_payment' || order.status === 'completed' || order.status === 'cancelled' || order.status === 'accepted' || order.status === 'delivering'}}">
+      <block wx:if="{{order.status === 'pending_payment'}}">
+        <button class="btn-outline btn-cancel" bindtap="cancelOrder">取消订单</button>
+        <button class="btn-warning pay-btn" bindtap="showPayment" loading="{{paying}}" disabled="{{paying}}">
+          {{paying ? '支付中…' : '立即支付 ¥' + order.price}}
+        </button>
+      </block>
+      <block wx:if="{{order.status === 'completed' || order.status === 'cancelled'}}">
+        <button class="btn-primary return-btn" bindtap="goHome">返回首页</button>
+      </block>
+      <block wx:if="{{order.status === 'accepted' || order.status === 'delivering'}}">
+        <button class="btn-primary contact-btn" open-type="contact" session-from="订单:{{order._id}},状态:{{order.status}},类型:{{order.orderType}},用户:{{order.userNickname || '匿名'}},openid:{{order.userId || ''}}">联系客服</button>
+      </block>
+    </view>
+    <view class="bar-placeholder"></view>
+  </block>
+</view>

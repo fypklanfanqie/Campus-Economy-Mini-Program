@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "骑手中心",
+  "usingComponents": {
+    "icon": "/components/icon/icon",
+    "status-tag": "/components/status-tag/status-tag"
+  }
+}

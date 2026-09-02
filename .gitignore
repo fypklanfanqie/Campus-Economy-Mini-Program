@@ -1,0 +1,19 @@
+# ==== 微信开发者工具 ====
+project.private.config.json
+
+# ==== 依赖 ====
+node_modules/
+miniprogram_npm/
+
+# ==== 本地开发产物 ====
+.superpowers/
+docs/
+*.log
+.DS_Store
+
+# ==== 编辑器 ====
+.vscode/
+.idea/
+
+# ==== 云函数本地缓存 ====
+cloudfunctions/**/.env

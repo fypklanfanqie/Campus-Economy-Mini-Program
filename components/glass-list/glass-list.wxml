@@ -1,0 +1,3 @@
+<view class="glass-list" style="margin: {{margin}};">
+  <slot />
+</view>

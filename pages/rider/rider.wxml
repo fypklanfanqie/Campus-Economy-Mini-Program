@@ -1,0 +1,195 @@
+<!-- pages/rider/rider.wxml - 骑手中心（iOS 18 磨砂玻璃风格） -->
+<view class="page">
+  <!-- ========== 未开通骑手 ========== -->
+  <block wx:if="{{!isRider}}">
+    <view class="section-header">成为骑手</view>
+    <view class="glass-card hero-card">
+      <view class="hero-row">
+        <icon name="bicycle" size="56" color="#007AFF" />
+        <view class="hero-info">
+          <text class="hero-title">成为骑手</text>
+          <text class="hero-desc">接单送货，赚取零花钱</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-header">收益规则</view>
+    <view class="glass-list">
+      <view class="glass-list-item rule-row">
+        <text class="rule-key">校内</text>
+        <text class="rule-val">小件¥2.4 / 中件¥3.2 / 大件¥4.1</text>
+      </view>
+      <view class="glass-list-divider"></view>
+      <view class="glass-list-item rule-row">
+        <text class="rule-key">校外</text>
+        <text class="rule-val">校内基础上 +¥2.0</text>
+      </view>
+      <view class="glass-list-divider"></view>
+      <view class="glass-list-item rule-row">
+        <text class="rule-key">提现</text>
+        <text class="rule-val">累计满¥20 可申请</text>
+      </view>
+    </view>
+
+    <view class="section-header">微信资料</view>
+    <view class="glass-list">
+      <view class="glass-list-item wx-login-row">
+        <button class="wx-avatar" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image class="wx-avatar-img" src="{{regAvatar || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'}}" mode="aspectFill" />
+        </button>
+        <input class="wx-nickname" type="nickname" placeholder="点击获取微信昵称" value="{{regNickName}}" bindinput="onRegNickInput" bindblur="onRegNickBlur" />
+      </view>
+    </view>
+
+    <view class="section-header">身份信息</view>
+    <view class="glass-list">
+      <view class="glass-list-item form-item">
+        <text class="form-label">真实姓名</text>
+        <input class="form-input" placeholder="默认微信昵称，可改" value="{{regName}}" bindinput="onRegName" maxlength="20" />
+      </view>
+      <view class="glass-list-divider"></view>
+      <view class="glass-list-item form-item">
+        <text class="form-label">手机号</text>
+        <input class="form-input" type="number" placeholder="接收接单通知" value="{{regPhone}}" bindinput="onRegPhone" maxlength="11" />
+      </view>
+    </view>
+
+    <view class="submit-wrap">
+      <button class="btn-primary submit-btn" bindtap="registerRider" loading="{{registering}}" disabled="{{registering}}">
+        {{registering ? '开通中...' : '立即成为骑手'}}
+      </button>
+    </view>
+  </block>
+
+  <!-- ========== 已开通骑手 ========== -->
+  <block wx:else>
+    <!-- 收益概览 -->
+    <view class="glass-card balance-section">
+      <text class="balance-label">可提现余额</text>
+      <text class="balance-value">¥{{rider.balanceText}}</text>
+      <view class="balance-sub">
+        <view class="sub-item">
+          <text class="sub-num">{{rider.totalEarnedText}}</text>
+          <text class="sub-label">累计收入</text>
+        </view>
+        <view class="sub-divider"></view>
+        <view class="sub-item">
+          <text class="sub-num">{{rider.totalWithdrawnText}}</text>
+          <text class="sub-label">已提现</text>
+        </view>
+        <view class="sub-divider"></view>
+        <view class="sub-item">
+          <text class="sub-num">{{rider.pendingWithdrawalText}}</text>
+          <text class="sub-label">提现中</text>
+        </view>
+      </view>
+      <button class="btn-primary withdraw-btn {{rider.balance < threshold ? 'disabled' : ''}}" bindtap="openWithdraw">
+        {{rider.balance < threshold ? '满¥20可提现' : '申请提现'}}
+      </button>
+    </view>
+
+    <!-- 分段控制 -->
+    <view class="segment glass-bar">
+      <view class="segment-item {{activeTab === 'available' ? 'active' : ''}}" bindtap="switchTab" data-tab="available">待接单 ({{availableOrders.length}})</view>
+      <view class="segment-item {{activeTab === 'mine' ? 'active' : ''}}" bindtap="switchTab" data-tab="mine">我的配送 ({{myOrders.length}})</view>
+    </view>
+
+    <!-- 待接单 -->
+    <view wx:if="{{activeTab === 'available'}}">
+      <view class="order-list" wx:if="{{availableOrders.length > 0}}">
+        <view class="glass-card rider-order" wx:for="{{availableOrders}}" wx:key="_id">
+          <view class="ro-header">
+            <view class="ro-header-left">
+              <text class="ro-size" wx:if="{{item.orderType === 'print'}}"><icon name="printer" size="28" color="var(--text-primary)" /> 文件打印</text>
+              <text class="ro-size" wx:elif="{{item.orderType === 'takeout'}}"><icon name="takeoutbag" size="28" color="var(--text-primary)" /> 外卖代拿</text>
+              <text class="ro-size" wx:elif="{{item.orderType === 'selfpick'}}"><icon name="fork-knife" size="28" color="var(--text-primary)" /> 校内代取餐</text>
+              <text class="ro-size" wx:else>{{item.sizeText}}</text>
+              <text class="ro-loc">{{item.locText}}</text>
+            </view>
+            <view class="ro-header-right">
+              <text class="ro-income price">{{item.incomeText}}</text>
+              <button class="btn-primary ro-accept" size="mini" bindtap="acceptOrder" data-id="{{item._id}}">接单</button>
+            </view>
+          </view>
+          <view class="ro-body">
+            <text class="ro-line"><icon name="mappin" size="24" color="var(--text-secondary)" /> 送达：{{item.deliveryZone || '未指定'}}{{item.orderType === 'takeout' && item.dormBuilding ? ' ' + item.dormBuilding : ''}}</text>
+            <text class="ro-line" wx:if="{{item.orderType === 'takeout'}}"><icon name="takeoutbag" size="24" color="var(--text-secondary)" /> 取餐：{{item.gateLocation}}{{item.lockerCode ? ' / 开柜码:' + item.lockerCode : ''}}</text>
+            <text class="ro-line" wx:else><icon name="doc-text" size="24" color="var(--text-secondary)" /> 取件码：{{item.pickupCode}}</text>
+          </view>
+          <view class="ro-footer">
+            <text class="ro-time">{{item.createTimeText}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="empty" wx:else>
+        <icon name="shippingbox" size="80" color="var(--text-tertiary)" />
+        <text class="empty-text">暂无待接订单</text>
+      </view>
+    </view>
+
+    <!-- 我的配送 -->
+    <view wx:if="{{activeTab === 'mine'}}">
+      <view class="order-list" wx:if="{{myOrders.length > 0}}">
+        <view class="glass-card rider-order" wx:for="{{myOrders}}" wx:key="_id">
+          <view class="ro-header">
+            <text class="ro-size" wx:if="{{item.orderType === 'print'}}"><icon name="printer" size="28" color="var(--text-primary)" /> 文件打印</text>
+            <text class="ro-size" wx:elif="{{item.orderType === 'takeout'}}"><icon name="takeoutbag" size="28" color="var(--text-primary)" /> 外卖代拿</text>
+            <text class="ro-size" wx:elif="{{item.orderType === 'selfpick'}}"><icon name="fork-knife" size="28" color="var(--text-primary)" /> 校内代取餐</text>
+            <text class="ro-size" wx:else>{{item.sizeText}}</text>
+            <text class="ro-loc">{{item.locText}}</text>
+            <text class="tag tag-{{item.status}}">{{item.statusText}}</text>
+          </view>
+          <view class="ro-body">
+            <text class="ro-line"><icon name="mappin" size="24" color="var(--text-secondary)" /> 送达：{{item.deliveryZone || '未指定'}}{{item.orderType === 'takeout' && item.dormBuilding ? ' ' + item.dormBuilding : ''}}</text>
+            <text class="ro-line" wx:if="{{item.orderType === 'takeout'}}"><icon name="takeoutbag" size="24" color="var(--text-secondary)" /> 取餐：{{item.gateLocation}}{{item.lockerCode ? ' / 开柜码:' + item.lockerCode : ''}}</text>
+            <text class="ro-line" wx:elif="{{item.orderType === 'print'}}"><icon name="printer" size="24" color="var(--text-secondary)" /> 文件：{{item.fileName}}{{item.filePages ? '（' + item.filePages + '页）' : ''}}</text>
+            <text class="ro-line" wx:else><icon name="doc-text" size="24" color="var(--text-secondary)" /> 取件码：{{item.pickupCode}}</text>
+            <text class="ro-line" wx:if="{{item.incomeText}}"><icon name="banknote" size="24" color="var(--text-secondary)" /> 收入：{{item.incomeText}}</text>
+          </view>
+          <view class="ro-footer">
+            <text class="ro-time">{{item.createTimeText}}</text>
+            <view class="ro-actions">
+              <button class="btn-outline ro-btn" size="mini" wx:if="{{item.orderType === 'print' && item.fileTempUrl}}" bindtap="viewPrintFile" data-url="{{item.fileTempUrl}}" data-type="{{item.fileType}}">查看文件</button>
+              <button class="btn-outline ro-btn" size="mini" wx:if="{{item.status === 'accepted'}}" bindtap="updateStatus" data-id="{{item._id}}" data-action="deliver">出发配送</button>
+              <button class="btn-primary ro-btn" size="mini" wx:if="{{item.status === 'accepted' || item.status === 'delivering'}}" bindtap="updateStatus" data-id="{{item._id}}" data-action="complete">确认送达</button>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="empty" wx:else>
+        <icon name="shippingbox" size="80" color="var(--text-tertiary)" />
+        <text class="empty-text">还没有接单记录</text>
+      </view>
+    </view>
+
+    <!-- 提现记录 -->
+    <block wx:if="{{withdrawals.length > 0}}">
+      <view class="section-header">提现记录</view>
+      <view class="glass-list">
+        <view class="glass-list-item wd-item" wx:for="{{withdrawals}}" wx:key="_id">
+          <view class="wd-left">
+            <text class="wd-amount">{{item.amountText}}</text>
+            <text class="wd-time">{{item.createTimeText}}</text>
+          </view>
+          <text class="wd-status wd-{{item.status}}">{{item.statusText}}</text>
+        </view>
+      </view>
+    </block>
+  </block>
+
+  <!-- 提现弹窗 -->
+  <view class="glass-mask" wx:if="{{showWithdrawModal}}" catchtap="closeWithdraw"></view>
+  <view class="bottom-sheet withdraw-sheet" wx:if="{{showWithdrawModal}}" catchtap="noop">
+    <view class="modal-grip"></view>
+    <view class="modal-title">申请提现</view>
+    <view class="modal-balance">可提现余额：¥{{rider.balanceText}}</view>
+    <view class="wd-input-wrap">
+      <text class="form-label">提现金额</text>
+      <input class="form-input wd-input" type="digit" placeholder="最多¥{{rider.balanceText}}" value="{{withdrawAmount}}" bindinput="onWithdrawAmount" />
+    </view>
+    <view class="modal-btns">
+      <button class="btn-ghost modal-btn modal-cancel" bindtap="closeWithdraw">取消</button>
+      <button class="btn-primary modal-btn modal-confirm" bindtap="submitWithdraw" loading="{{withdrawing}}" disabled="{{withdrawing}}">提交申请</button>
+    </view>
+  </view>
+</view>

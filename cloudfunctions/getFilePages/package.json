@@ -1,0 +1,11 @@
+{
+  "name": "getFilePages",
+  "version": "1.0.0",
+  "description": "解析上传文件页数（doc/docx/pdf）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "pdf-lib": "^1.17.1",
+    "jszip": "^3.10.1"
+  }
+}

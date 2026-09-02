@@ -1,0 +1,122 @@
+<!-- pages/print/print.wxml - 文件打印下单页（iOS 18 磨砂玻璃风格） -->
+<view class="page">
+  <!-- 文件上传 -->
+  <view class="section-header">上传文件</view>
+  <view wx:if="{{!fileInfo.name}}" class="glass-card upload-card" bindtap="chooseFile">
+    <view class="upload-plus">
+      <icon name="plus" size="64" color="var(--primary-color)" />
+    </view>
+    <view class="upload-tip">点击选择手机文件</view>
+    <view class="upload-sub">支持 doc / docx / pdf</view>
+    <view class="upload-hint">需先将文件发到微信聊天，再从聊天中选择</view>
+  </view>
+
+  <view wx:else class="glass-list">
+    <view class="file-box">
+      <view class="file-icon">
+        <icon name="doc-text" size="40" color="var(--primary-color)" />
+      </view>
+      <view class="file-meta">
+        <text class="file-name">{{fileInfo.name}}</text>
+        <text class="file-size">{{fileInfo.sizeText}}</text>
+      </view>
+      <text class="file-rechoose" bindtap="rechooseFile">重选</text>
+    </view>
+
+    <view class="parse-row" wx:if="{{fileInfo.name && !fileInfo.fileID}}">
+      <button class="btn-primary parse-btn" bindtap="parsePages" loading="{{parsing}}" disabled="{{parsing}}">
+        {{parsing ? '解析中...' : '解析页数'}}
+      </button>
+    </view>
+    <view class="parse-tip" wx:if="{{parseTip}}">{{parseTip}}</view>
+
+    <view class="manual-row" wx:if="{{needsManual}}">
+      <text class="manual-label">文件页数</text>
+      <input class="manual-input" type="number" placeholder="请输入页数" value="{{manualPages}}" bindinput="onManualPagesInput" maxlength="4" />
+      <text class="manual-unit">页</text>
+    </view>
+  </view>
+
+  <!-- 打印明细 -->
+  <view class="section-header" wx:if="{{fileInfo.fileID}}">打印明细</view>
+  <view class="glass-list" wx:if="{{fileInfo.fileID}}">
+    <view class="info-row">
+      <text class="info-label">识别页数</text>
+      <text class="info-value">{{needsManual ? manualPages : pages}} 页</text>
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="info-row">
+      <text class="info-label">打印份数</text>
+      <view class="stepper">
+        <view class="step-btn" bindtap="changeCopies" data-delta="-1">
+          <icon name="minus" size="32" color="var(--primary-color)" />
+        </view>
+        <text class="step-num">{{copies}}</text>
+        <view class="step-btn" bindtap="changeCopies" data-delta="1">
+          <icon name="plus" size="32" color="var(--primary-color)" />
+        </view>
+      </view>
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="info-row">
+      <text class="info-label">打印费（¥{{unitPrice}}/页）</text>
+      <text class="info-value">¥{{printFeeText}}</text>
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="info-row">
+      <text class="info-label">配送费</text>
+      <text class="info-value">¥{{deliveryFeeText}}</text>
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="info-row price-row">
+      <text class="info-label">合计</text>
+      <text class="price price-large">¥{{totalPriceText}}</text>
+    </view>
+  </view>
+
+  <!-- 送达信息 -->
+  <view class="section-header" wx:if="{{fileInfo.fileID}}">送达信息</view>
+  <view class="glass-list" wx:if="{{fileInfo.fileID}}">
+    <view class="form-item">
+      <text class="form-label">收货人</text>
+      <input class="form-input" placeholder="请输入姓名" value="{{recipientName}}" bindinput="onNameInput" maxlength="20" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item">
+      <text class="form-label">手机号</text>
+      <input class="form-input" type="number" placeholder="请输入手机号" value="{{phone}}" bindinput="onPhoneInput" maxlength="11" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item" bindtap="showZonePicker">
+      <text class="form-label">送达园区</text>
+      <text class="form-input picker-value {{deliveryZone ? '' : 'placeholder'}}">{{deliveryZone || '请选择园区'}}</text>
+      <icon name="chevron-right" size="28" color="var(--text-tertiary)" />
+    </view>
+    <view class="glass-list-divider"></view>
+    <view class="form-item form-item-textarea">
+      <text class="form-label">备注</text>
+      <textarea class="form-textarea" placeholder="选填，如单双面、装订要求等" value="{{remark}}" bindinput="onRemarkInput" maxlength="200" auto-height />
+    </view>
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-wrap" wx:if="{{fileInfo.fileID}}">
+    <button class="btn-primary submit-btn" bindtap="submitOrder" loading="{{submitting}}" disabled="{{submitting || !canSubmit}}">
+      {{submitting ? '提交中...' : '提交订单（¥' + totalPriceText + '）'}}
+    </button>
+  </view>
+
+  <!-- 园区选择器 -->
+  <view class="glass-mask" wx:if="{{showZoneModal}}" catchtap="closeZonePicker"></view>
+  <view class="bottom-sheet zone-modal" wx:if="{{showZoneModal}}">
+    <view class="modal-grip"></view>
+    <view class="zone-title">选择送达园区</view>
+    <scroll-view class="zone-list" scroll-y="true">
+      <view class="zone-item {{deliveryZone === item ? 'selected' : ''}}" wx:for="{{zoneOptions}}" wx:key="*this" bindtap="selectZone" data-zone="{{item}}">
+        <text>{{item}}</text>
+        <icon wx:if="{{deliveryZone === item}}" name="checkmark" size="32" color="var(--primary-color)" />
+      </view>
+    </scroll-view>
+    <button class="btn-primary zone-confirm" bindtap="closeZonePicker">确定</button>
+  </view>
+</view>

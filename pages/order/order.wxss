@@ -1,0 +1,249 @@
+.page {
+  padding-bottom: 40rpx;
+  min-height: 100vh;
+}
+
+/* 步骤指示器 */
+.step-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24rpx 32rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 24rpx;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.step-item text {
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+}
+
+.step-item.active text {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.step-item.done text {
+  color: var(--success-color);
+}
+
+.step-line {
+  width: 48rpx;
+  height: 2rpx;
+  background: var(--separator);
+  margin: 0 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.step-line.done {
+  background: var(--success-color);
+}
+
+/* 选择卡片 */
+.select-card {
+  display: flex;
+  align-items: center;
+  padding: 28rpx;
+  transition: background 0.15s ease;
+}
+
+.select-card:active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.select-card.selected {
+  background: rgba(0, 122, 255, 0.04);
+}
+
+.card-icon-box {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.box-blue { background: rgba(0, 122, 255, 0.12); }
+.box-green { background: rgba(52, 199, 89, 0.12); }
+.box-orange { background: rgba(255, 149, 0, 0.12); }
+
+.card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-name {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-desc {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-top: 4rpx;
+}
+
+.card-trailing {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.card-price {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-price.free {
+  color: var(--success-color);
+  font-size: 26rpx;
+}
+
+.select-card.selected .card-price {
+  color: var(--primary-color);
+}
+
+/* 表单 */
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  min-height: 56rpx;
+}
+
+.form-item-textarea {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-label {
+  font-size: 32rpx;
+  color: var(--text-primary);
+  width: 140rpx;
+  flex-shrink: 0;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 32rpx;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.form-textarea {
+  width: 100%;
+  font-size: 30rpx;
+  margin-top: 16rpx;
+  min-height: 100rpx;
+  color: var(--text-primary);
+}
+
+.picker-value {
+  flex: 1;
+  font-size: 32rpx;
+  text-align: right;
+  color: var(--text-primary);
+}
+
+.picker-value.placeholder {
+  color: var(--text-tertiary);
+}
+
+/* 磨砂底部下单栏 */
+.order-bar {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 32rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+}
+
+.bar-price {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.bar-price-label {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+}
+
+.bar-price-value {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5rpx;
+}
+
+.bar-btn {
+  width: 280rpx;
+  height: 88rpx;
+  font-size: 32rpx;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.bar-placeholder {
+  height: 160rpx;
+}
+
+/* 园区选择器 */
+.zone-title {
+  text-align: center;
+  padding: 8rpx 0 24rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.zone-list {
+  max-height: 560rpx;
+}
+
+.zone-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  font-size: 32rpx;
+  color: var(--text-primary);
+  border-bottom: 1rpx solid var(--separator-opaque);
+  transition: background 0.15s ease;
+}
+
+.zone-item:active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.zone-item.selected {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.zone-confirm {
+  width: 100%;
+  height: 92rpx;
+  margin-top: 24rpx;
+  font-size: 32rpx;
+}
+
+.modal-grip {
+  width: 64rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+  background: rgba(60, 60, 67, 0.3);
+  margin: 12rpx auto 20rpx;
+}

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NTU快递帮 - 管理后台</title>
+  <script src="https://imgcache.qq.com/qcloud/cloudbase-js-sdk/1.7.1/cloudbase.full.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* 顶部栏 */
+    .header {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header h1 { font-size: 20px; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .refresh-btn {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .refresh-btn:hover { background: rgba(255,255,255,0.25); }
+    .logout-btn {
+      background: #e74c3c;
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* 统计卡 */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      padding: 20px 24px;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .stat-label { font-size: 13px; color: #999; margin-bottom: 6px; }
+    .stat-value { font-size: 28px; font-weight: bold; }
+    .stat-value.green { color: #07C160; }
+    .stat-value.orange { color: #FF9500; }
+    .stat-value.blue { color: #2196F3; }
+    .stat-value.red { color: #e74c3c; }
+
+    /* 内容区 */
+    .content { padding: 0 24px 24px; }
+
+    /* 筛选栏 */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .filter-tag {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #666;
+    }
+    .filter-tag:hover { border-color: #07C160; color: #07C160; }
+    .filter-tag.active { background: #07C160; color: #fff; border-color: #07C160; }
+
+    /* 订单表格 */
+    .order-table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead {
+      background: #fafafa;
+    }
+    th {
+      text-align: left;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #999;
+      font-weight: 500;
+      border-bottom: 1px solid #eee;
+      white-space: nowrap;
+    }
+    td {
+      padding: 12px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid #f5f5f5;
+      vertical-align: middle;
+    }
+    tbody tr:hover { background: #f9fffb; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge-pending { background: #FFF3E0; color: #FF9500; }
+    .badge-accepted { background: #E3F2FD; color: #2196F3; }
+    .badge-delivering { background: #E8F5E9; color: #4CAF50; }
+    .badge-completed { background: #F3E5F5; color: #9C27B0; }
+    .badge-cancelled { background: #F5F5F5; color: #999; }
+
+    .price-td { color: #e74c3c; font-weight: bold; font-size: 14px; }
+
+    .btn-sm {
+      padding: 4px 12px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 12px;
+      cursor: pointer;
+      background: #fff;
+      color: #666;
+      white-space: nowrap;
+    }
+    .btn-sm:hover { border-color: #999; }
+    .btn-sm.danger { background: #fef0f0; border-color: #fde2e2; color: #e74c3c; }
+    .btn-sm.danger:hover { background: #fde2e2; }
+
+    .order-id {
+      font-family: monospace;
+      font-size: 11px;
+      color: #999;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+    }
+
+    .contact-info { font-size: 12px; color: #666; line-height: 1.6; }
+
+    /* 空状态 */
+    .empty { text-align: center; padding: 60px; color: #999; }
+    .empty-icon { font-size: 48px; margin-bottom: 10px; }
+
+    /* 加载 */
+    .loading { text-align: center; padding: 40px; color: #999; }
+    .spinner {
+      display: inline-block;
+      width: 24px; height: 24px;
+      border: 3px solid #eee;
+      border-top-color: #07C160;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* 登录页 */
+    .login-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #07C160, #00BFA5);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
+    }
+    .login-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      width: 380px;
+      max-width: 90vw;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    .login-box h2 { margin-bottom: 8px; font-size: 22px; }
+    .login-box p { color: #999; font-size: 14px; margin-bottom: 24px; }
+    .login-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #eee;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .login-box input:focus { border-color: #07C160; }
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: #07C160;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .login-btn:hover { background: #06AD56; }
+    .login-btn:disabled { background: #ccc; cursor: not-allowed; }
+    .login-error { color: #e74c3c; font-size: 13px; margin-top: 8px; }
+
+    /* Toast */
+    .toast {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      background: #333; color: #fff; padding: 12px 24px;
+      border-radius: 8px; font-size: 14px; z-index: 2000;
+      animation: fadeInOut 2.5s ease;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; top: 10px; }
+      15% { opacity: 1; top: 20px; }
+      85% { opacity: 1; top: 20px; }
+      100% { opacity: 0; top: 10px; }
+    }
+
+    /* 分页 */
+    .pagination {
+      display: flex; justify-content: center; align-items: center;
+      gap: 10px; padding: 20px;
+    }
+    .page-btn {
+      padding: 8px 16px; border: 1px solid #ddd;
+      border-radius: 6px; background: #fff;
+      cursor: pointer; font-size: 13px;
+    }
+    .page-btn:hover { border-color: #07C160; color: #07C160; }
+    .page-btn:disabled { color: #ccc; cursor: not-allowed; }
+    .page-info { font-size: 13px; color: #999; }
+
+    /* 弹窗 */
+    .modal-mask {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-box {
+      background: #fff; border-radius: 12px; padding: 30px;
+      width: 400px; max-width: 90vw;
+    }
+    .modal-box h3 { margin-bottom: 16px; font-size: 18px; }
+    .modal-box p { font-size: 14px; color: #666; margin-bottom: 20px; }
+    .modal-box label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #666; margin-bottom: 20px; cursor: pointer; }
+    .modal-btns { display: flex; gap: 10px; justify-content: flex-end; }
+    .modal-btns button {
+      padding: 10px 24px; border-radius: 6px; border: 1px solid #ddd;
+      cursor: pointer; font-size: 14px;
+    }
+    .modal-btn-cancel { background: #f5f5f5; color: #666; }
+    .modal-btn-danger { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+
+    @media (max-width: 768px) {
+      .header { padding: 12px 16px; }
+      .header h1 { font-size: 17px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 12px 16px; }
+      .content { padding: 0 10px 10px; }
+      th, td { padding: 8px; font-size: 11px; }
+      .order-table-wrap { overflow-x: auto; }
+      table { min-width: 800px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 登录遮罩 -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <h2>🔐 管理员登录</h2>
+    <p>NTU快递帮 - 管理后台</p>
+    <input type="password" id="pwdInput" placeholder="请输入管理员密码" autofocus onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">登 录</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- 主界面（登录后显示） -->
+<div id="mainApp" style="display:none;">
+  <!-- 顶部 -->
+  <div class="header">
+    <h1>📦 NTU快递帮 - 管理后台</h1>
+    <div class="header-right">
+      <button class="refresh-btn" onclick="loadOrders()">🔄 刷新</button>
+      <button class="logout-btn" onclick="logout()">退出</button>
+    </div>
+  </div>
+
+  <!-- 统计 -->
+  <div class="stats-row" id="statsRow"></div>
+
+  <!-- 内容 -->
+  <div class="content">
+    <div class="filter-bar" id="filterBar">
+      <span class="filter-tag active" data-status="all" onclick="switchFilter('all', this)">全部</span>
+      <span class="filter-tag" data-status="pending_payment" onclick="switchFilter('pending_payment', this)">待付款</span>
+      <span class="filter-tag" data-status="accepted" onclick="switchFilter('accepted', this)">已接单</span>
+      <span class="filter-tag" data-status="delivering" onclick="switchFilter('delivering', this)">配送中</span>
+      <span class="filter-tag" data-status="completed" onclick="switchFilter('completed', this)">已完成</span>
+      <span class="filter-tag" data-status="cancelled" onclick="switchFilter('cancelled', this)">已取消</span>
+    </div>
+
+    <div class="order-table-wrap">
+      <div id="loadingArea" class="loading"><span class="spinner"></span> 加载中...</div>
+      <div id="tableArea" style="display:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>下单时间</th>
+              <th>状态</th>
+              <th>用户</th>
+              <th>收货人</th>
+              <th>手机号</th>
+              <th>包裹</th>
+              <th>取件码</th>
+              <th>送达园区</th>
+              <th>金额</th>
+              <th>付款时间</th>
+              <th>备注</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="orderTbody"></tbody>
+        </table>
+        <div class="empty" id="emptyArea" style="display:none;">
+          <div class="empty-icon">📭</div>
+          <div>暂无订单</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination" id="pagination">
+      <button class="page-btn" id="prevBtn" onclick="prevPage()">上一页</button>
+      <span class="page-info" id="pageInfo">第 1 页</span>
+      <button class="page-btn" id="nextBtn" onclick="nextPage()">下一页</button>
+    </div>
+  </div>
+</div>
+
+<!-- 确认弹窗 -->
+<div class="modal-mask" id="confirmModal" style="display:none;">
+  <div class="modal-box">
+    <h3>⚠️ 标记为未付款</h3>
+    <p>确定将订单 <strong id="modalOrderId"></strong> 标记为未付款吗？用户将被通知重新付款。</p>
+    <label><input type="checkbox" id="modalBlacklist" checked> 同时拉黑该用户（禁止再次下单）</label>
+    <div class="modal-btns">
+      <button class="modal-btn-cancel" onclick="closeModal()">取消</button>
+      <button class="modal-btn-danger" onclick="confirmMarkUnpaid()">确认标记</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ========== CloudBase 初始化 ==========
+  const ENV_ID = 'YOUR_CLOUD_ENV_ID';
+  const app = cloudbase.init({ env: ENV_ID });
+  const auth = app.auth({ persistence: 'local' });
+  const db = app.database();
+
+  let currentPage = 1;
+  let currentStatus = 'all';
+  let totalCount = 0;
+  const PAGE_SIZE = 20;
+  let markingOrderId = '';
+
+  // 状态文本映射
+  const STATUS_MAP = {
+    pending_payment: '待付款',
+    accepted: '已接单',
+    delivering: '配送中',
+    completed: '已完成',
+    cancelled: '已取消'
+  };
+
+  const BADGE_CLASS = {
+    pending_payment: 'badge-pending',
+    accepted: 'badge-accepted',
+    delivering: 'badge-delivering',
+    completed: 'badge-completed',
+    cancelled: 'badge-cancelled'
+  };
+
+  const SIZE_MAP = { small: '小件', medium: '中件', large: '大件' };
+
+  // ========== 一次性密码验证 ==========
+  let adminValidated = false;
+
+  async function doLogin() {
+    const pwd = document.getElementById('pwdInput').value.trim();
+    const btn = document.getElementById('loginBtn');
+    const errEl = document.getElementById('loginError');
+
+    if (!pwd) { errEl.textContent = '请输入密码'; return; }
+
+    btn.disabled = true;
+    btn.textContent = '验证中...';
+    errEl.textContent = '';
+
+    try {
+      // 匿名登录获取数据库访问权限
+      await auth.anonymousAuthProvider().signIn();
+
+      // 查询 paymentConfig 中的管理员密码
+      const res = await db.collection('paymentConfig').doc('config').get();
+      const config = res.data?.[0] || res.data;
+      const adminPwd = config?.adminPassword || 'admin123';
+
+      if (pwd === adminPwd) {
+        adminValidated = true;
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        loadOrders();
+        loadStats();
+      } else {
+        errEl.textContent = '密码错误，请重试';
+        await auth.signOut();
+      }
+    } catch (e) {
+      console.error('登录失败:', e);
+      if (e.message?.includes('collection not exists')) {
+        errEl.textContent = '数据库未初始化，请先在微信开发者工具中创建 paymentConfig 集合';
+      } else if (e.message?.includes('auth')) {
+        errEl.textContent = '请先在云开发控制台开启匿名登录（登录方式 → 匿名登录）';
+      } else {
+        errEl.textContent = '连接失败: ' + (e.message || '请刷新重试');
+      }
+    }
+
+    btn.disabled = false;
+    btn.textContent = '登 录';
+  }
+
+  function logout() {
+    adminValidated = false;
+    currentPage = 1;
+    currentStatus = 'all';
+    auth.signOut().then(() => {
+      document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('loginOverlay').style.display = 'flex';
+      document.getElementById('pwdInput').value = '';
+      document.getElementById('loginError').textContent = '';
+    });
+  }
+
+  // ========== 提示 ==========
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2600);
+  }
+
+  // ========== 格式化 ==========
+  function fmtTime(d) {
+    if (!d) return '--';
+    const date = d.toDate ? d.toDate() : new Date(d);
+    if (isNaN(date.getTime())) return '--';
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const h = date.getHours().toString().padStart(2, '0');
+    const min = date.getMinutes().toString().padStart(2, '0');
+    return `${m}-${day} ${h}:${min}`;
+  }
+
+  // ========== 筛选 ==========
+  function switchFilter(status, el) {
+    currentStatus = status;
+    currentPage = 1;
+    document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    loadOrders();
+  }
+
+  // ========== 加载订单 ==========
+  async function loadOrders() {
+    if (!adminValidated) return;
+
+    document.getElementById('loadingArea').style.display = 'block';
+    document.getElementById('tableArea').style.display = 'none';
+
+    try {
+      const where = {};
+      if (currentStatus !== 'all') where.status = currentStatus;
+
+      const countRes = await db.collection('orders').where(where).count();
+      totalCount = countRes.total;
+
+      const res = await db.collection('orders')
+        .where(where)
+        .orderBy('createTime', 'desc')
+        .skip((currentPage - 1) * PAGE_SIZE)
+        .limit(PAGE_SIZE)
+        .get();
+
+      const orders = res.data || [];
+      renderTable(orders);
+      updatePagination();
+      loadStats();
+    } catch (e) {
+      console.error('加载订单失败:', e);
+      showToast('加载失败: ' + (e.message || '请刷新重试'));
+      document.getElementById('orderTbody').innerHTML = '';
+      document.getElementById('emptyArea').style.display = 'block';
+    }
+
+    document.getElementById('loadingArea').style.display = 'none';
+    document.getElementById('tableArea').style.display = 'block';
+  }
+
+  // ========== 渲染表格 ==========
+  function renderTable(orders) {
+    const tbody = document.getElementById('orderTbody');
+    const empty = document.getElementById('emptyArea');
+
+    if (orders.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+    tbody.innerHTML = orders.map(o => {
+      const canMarkUnpaid = ['accepted', 'delivering', 'completed'].includes(o.status);
+      return `
+        <tr>
+          <td style="white-space:nowrap;">${fmtTime(o.createTime)}</td>
+          <td><span class="status-badge ${BADGE_CLASS[o.status] || ''}">${STATUS_MAP[o.status] || o.status}</span></td>
+          <td>${esc(o.userNickname) || '匿名'}</td>
+          <td>${esc(o.recipientName)}</td>
+          <td>${esc(o.phone)}</td>
+          <td>${SIZE_MAP[o.packageSize] || o.packageSize} / ${o.locationType === 'offCampus' ? '校外' : '校内'}</td>
+          <td>${esc(o.pickupCode)}</td>
+          <td>${esc(o.deliveryZone) || '--'}</td>
+          <td class="price-td">¥${o.price?.toFixed(1) || '0.0'}</td>
+          <td style="white-space:nowrap;">${fmtTime(o.payTime)}</td>
+          <td style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(o.remark) || ''}</td>
+          <td>${canMarkUnpaid
+            ? `<button class="btn-sm danger" onclick="showMarkModal('${o._id}')">标记未付款</button>`
+            : '<span style="color:#ccc;font-size:12px;">--</span>'}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  function esc(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // ========== 分页 ==========
+  function updatePagination() {
+    const totalPages = Math.ceil(totalCount / PAGE_SIZE) || 1;
+    document.getElementById('pageInfo').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页（${totalCount} 条）`;
+    document.getElementById('prevBtn').disabled = currentPage <= 1;
+    document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+  }
+
+  function prevPage() {
+    if (currentPage > 1) { currentPage--; loadOrders(); }
+  }
+
+  function nextPage() {
+    const totalPages = Math.ceil(totalCount / PAGE_SIZE) || 1;
+    if (currentPage < totalPages) { currentPage++; loadOrders(); }
+  }
+
+  // ========== 加载统计 ==========
+  async function loadStats() {
+    if (!adminValidated) return;
+    try {
+      const statuses = ['pending_payment', 'accepted', 'delivering', 'completed', 'cancelled'];
+      const results = await Promise.all(
+        statuses.map(s => db.collection('orders').where({ status: s }).count())
+      );
+      const counts = {};
+      statuses.forEach((s, i) => { counts[s] = results[i].total; });
+
+      // 计算已付款总金额
+      const paidResults = await Promise.all(
+        ['accepted', 'delivering', 'completed'].map(s =>
+          db.collection('orders').where({ status: s }).get()
+        )
+      );
+      let totalAmount = 0;
+      paidResults.forEach(r => {
+        (r.data || []).forEach(o => { totalAmount += o.price || 0; });
+      });
+
+      document.getElementById('statsRow').innerHTML = `
+        <div class="stat-card">
+          <div class="stat-label">待付款</div>
+          <div class="stat-value orange">${counts.pending_payment || 0}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">已接单</div>
+          <div class="stat-value blue">${counts.accepted || 0}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">配送中</div>
+          <div class="stat-value green">${counts.delivering || 0}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">已完成</div>
+          <div class="stat-value">${counts.completed || 0}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">已取消</div>
+          <div class="stat-value red">${counts.cancelled || 0}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">已付款总金额</div>
+          <div class="stat-value green">¥${totalAmount.toFixed(1)}</div>
+        </div>
+      `;
+    } catch (e) {
+      console.error('统计加载失败:', e);
+    }
+  }
+
+  // ========== 标记未付款 ==========
+  function showMarkModal(orderId) {
+    markingOrderId = orderId;
+    document.getElementById('modalOrderId').textContent = orderId;
+    document.getElementById('confirmModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('confirmModal').style.display = 'none';
+    markingOrderId = '';
+  }
+
+  async function confirmMarkUnpaid() {
+    if (!markingOrderId) return;
+    const blacklist = document.getElementById('modalBlacklist').checked;
+
+    try {
+      const orderRes = await db.collection('orders').doc(markingOrderId).get();
+      const order = orderRes.data?.[0] || orderRes.data;
+      if (!order) { showToast('订单不存在'); closeModal(); return; }
+
+      const now = new Date();
+      await db.collection('orders').doc(markingOrderId).update({
+        status: 'pending_payment',
+        payTime: null,
+        updateTime: now,
+        markedUnpaid: true,
+        markedTime: now
+      });
+
+      if (blacklist && order.userId) {
+        const blRes = await db.collection('blacklist')
+          .where({ userId: order.userId, active: true }).get();
+        if (!blRes.data?.length) {
+          await db.collection('blacklist').add({
+            userId: order.userId,
+            reason: `订单 ${markingOrderId} 标记未付款`,
+            createTime: now,
+            active: true
+          });
+        }
+      }
+
+      showToast('已标记为未付款' + (blacklist ? '，用户已拉黑' : ''));
+      closeModal();
+      loadOrders();
+    } catch (e) {
+      console.error('操作失败:', e);
+      showToast('操作失败: ' + (e.message || '请重试'));
+    }
+  }
+
+  // 键盘快捷键
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
+
+</body>
+</html>

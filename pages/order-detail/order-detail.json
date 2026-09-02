@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "icon": "/components/icon/icon",
+    "status-tag": "/components/status-tag/status-tag"
+  },
+  "navigationBarTitleText": "订单详情"
+}

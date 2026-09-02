@@ -1,0 +1,448 @@
+/* app.wxss - iOS 18 风格全局样式系统 */
+
+/* ============================================================
+   CSS 变量系统 - 浅色/深色双模式
+   ============================================================ */
+page {
+  /* ===== 浅色模式变量 ===== */
+  --primary-color: #007AFF;
+  --primary-active: #0062CC;
+  --success-color: #34C759;
+  --warning-color: #FF9500;
+  --danger-color: #FF3B30;
+  --purple-color: #AF52DE;
+  --pink-color: #FF2D55;
+  --teal-color: #5AC8FA;
+  --indigo-color: #5856D6;
+
+  --bg-primary: #F2F2F7;
+  --bg-gradient-start: #E8F1FF;
+  --bg-gradient-mid: #F5F5FF;
+  --bg-gradient-end: #FFF5F8;
+  --bg-glass: rgba(255, 255, 255, 0.78);
+  --bg-glass-strong: rgba(255, 255, 255, 0.92);
+  --bg-card-blue: rgba(0, 122, 255, 0.08);
+  --bg-card-orange: rgba(255, 149, 0, 0.08);
+  --bg-card-green: rgba(52, 199, 89, 0.08);
+  --bg-card-purple: rgba(175, 82, 222, 0.08);
+
+  --text-primary: #1C1C1E;
+  --text-secondary: #8E8E93;
+  --text-tertiary: #C7C7CC;
+  --text-inverse: #FFFFFF;
+
+  --separator: rgba(60, 60, 67, 0.22);
+  --separator-opaque: #E5E5EA;
+
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', sans-serif;
+  color: var(--text-primary);
+  background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-primary) 40%, var(--bg-gradient-end) 100%);
+  background-attachment: fixed;
+  font-size: 32rpx;
+  line-height: 1.4;
+  letter-spacing: -0.2rpx;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 深色模式变量 ===== */
+@media (prefers-color-scheme: dark) {
+  page {
+    --primary-color: #0A84FF;
+    --primary-active: #409CFF;
+    --success-color: #30D158;
+    --warning-color: #FF9F0A;
+    --danger-color: #FF453A;
+    --purple-color: #BF5AF2;
+
+    --bg-primary: #000000;
+    --bg-gradient-start: #0A1F3D;
+    --bg-gradient-mid: #1A1030;
+    --bg-gradient-end: #2A0A1A;
+    --bg-glass: rgba(28, 28, 30, 0.76);
+    --bg-glass-strong: rgba(28, 28, 30, 0.92);
+    --bg-card-blue: rgba(10, 132, 255, 0.16);
+    --bg-card-orange: rgba(255, 159, 10, 0.16);
+    --bg-card-green: rgba(48, 209, 88, 0.16);
+    --bg-card-purple: rgba(191, 90, 242, 0.16);
+
+    --text-primary: #FFFFFF;
+    --text-secondary: #8E8E93;
+    --text-tertiary: #48484A;
+    --text-inverse: #1C1C1E;
+
+    --separator: rgba(84, 84, 88, 0.45);
+    --separator-opaque: #38383A;
+  }
+}
+
+view, text, input, textarea, button, scroll-view, swiper, image {
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   磨砂玻璃效果
+   ============================================================ */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: saturate(180%) blur(40rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(40rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.16);
+}
+
+.glass-strong {
+  background: var(--bg-glass-strong);
+  backdrop-filter: saturate(180%) blur(50rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(50rpx);
+}
+
+/* ============================================================
+   卡片
+   ============================================================ */
+.glass-card {
+  background: var(--bg-glass);
+  backdrop-filter: saturate(180%) blur(40rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(40rpx);
+  border-radius: 28rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================================
+   列表组
+   ============================================================ */
+.glass-list {
+  background: var(--bg-glass);
+  backdrop-filter: saturate(180%) blur(40rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(40rpx);
+  border-radius: 28rpx;
+  overflow: hidden;
+  border: 1rpx solid rgba(255, 255, 255, 0.12);
+  margin: 0 32rpx;
+}
+
+.glass-list-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx;
+  min-height: 96rpx;
+  transition: background 0.15s ease;
+}
+
+.glass-list-item:active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.glass-list-divider {
+  height: 1rpx;
+  background: var(--separator);
+  margin-left: 84rpx;
+}
+
+/* ============================================================
+   按钮
+   ============================================================ */
+.btn-primary {
+  background: linear-gradient(135deg, #007AFF, #0A84FF);
+  color: #FFFFFF;
+  border-radius: 28rpx;
+  font-size: 34rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  height: 96rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.25);
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.btn-primary::after { border: none; }
+
+.btn-primary:active {
+  opacity: 0.9;
+  transform: scale(0.985);
+}
+
+.btn-primary[disabled] {
+  background: #D1D1D6;
+  box-shadow: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-primary {
+    background: linear-gradient(135deg, #0A84FF, #409CFF);
+    box-shadow: 0 8rpx 24rpx rgba(10, 132, 255, 0.35);
+  }
+  .btn-primary[disabled] {
+    background: #3A3A3C;
+    color: #8E8E93;
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2rpx solid rgba(0, 122, 255, 0.35);
+  border-radius: 28rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.btn-outline::after { border: none; }
+.btn-outline:active { background: rgba(0, 122, 255, 0.08); }
+
+.btn-warning {
+  background: linear-gradient(135deg, #FF9500, #FFAA33);
+  color: #FFFFFF;
+  border-radius: 28rpx;
+  font-size: 34rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  box-shadow: 0 8rpx 24rpx rgba(255, 149, 0, 0.25);
+}
+
+.btn-warning::after { border: none; }
+.btn-warning:active { opacity: 0.9; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--primary-color);
+  border-radius: 28rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+}
+
+.btn-ghost::after { border: none; }
+.btn-ghost:active { opacity: 0.7; }
+
+/* ============================================================
+   状态标签
+   ============================================================ */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 16rpx;
+  border-radius: 100rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.tag-pending, .tag-pending_payment { background: rgba(255, 149, 0, 0.12); color: #FF9500; }
+.tag-accepted { background: rgba(0, 122, 255, 0.12); color: #007AFF; }
+.tag-delivering { background: rgba(52, 199, 89, 0.12); color: #34C759; }
+.tag-completed { background: rgba(175, 82, 222, 0.12); color: #AF52DE; }
+.tag-cancelled { background: rgba(142, 142, 147, 0.12); color: #8E8E93; }
+
+@media (prefers-color-scheme: dark) {
+  .tag-pending, .tag-pending_payment { background: rgba(255, 159, 10, 0.18); color: #FF9F0A; }
+  .tag-accepted { background: rgba(10, 132, 255, 0.18); color: #0A84FF; }
+  .tag-delivering { background: rgba(48, 209, 88, 0.18); color: #30D158; }
+  .tag-completed { background: rgba(191, 90, 242, 0.18); color: #BF5AF2; }
+  .tag-cancelled { background: rgba(142, 142, 147, 0.18); color: #8E8E93; }
+}
+
+/* ============================================================
+   价格
+   ============================================================ */
+.price { color: var(--danger-color); font-weight: 600; }
+.price-large { font-size: 44rpx; font-weight: 700; letter-spacing: -0.5rpx; }
+
+/* ============================================================
+   分割线
+   ============================================================ */
+.divider {
+  height: 1rpx;
+  background: var(--separator-opaque);
+  margin: 24rpx 0;
+}
+
+/* ============================================================
+   空状态
+   ============================================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-state text {
+  color: var(--text-secondary);
+  margin-top: 24rpx;
+  font-size: 28rpx;
+}
+
+/* ============================================================
+   区域标题
+   ============================================================ */
+.section-header {
+  display: block;
+  padding: 40rpx 44rpx 16rpx;
+  font-size: 26rpx;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5rpx;
+}
+
+/* ============================================================
+   底部固定栏
+   ============================================================ */
+.glass-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  background: var(--bg-glass);
+  backdrop-filter: saturate(180%) blur(40rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(40rpx);
+  border-top: 1rpx solid rgba(255, 255, 255, 0.12);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ============================================================
+   磨砂遮罩
+   ============================================================ */
+.glass-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8rpx);
+  -webkit-backdrop-filter: blur(8rpx);
+  z-index: 1000;
+}
+
+/* ============================================================
+   底部弹出面板
+   ============================================================ */
+.bottom-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-glass-strong);
+  backdrop-filter: saturate(180%) blur(50rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(50rpx);
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 16rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  z-index: 1001;
+}
+
+/* ============================================================
+   中间弹窗
+   ============================================================ */
+.center-modal {
+  position: fixed;
+  top: 50%;
+  left: 56rpx;
+  right: 56rpx;
+  transform: translateY(-50%);
+  background: var(--bg-glass-strong);
+  backdrop-filter: saturate(180%) blur(50rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(50rpx);
+  border-radius: 28rpx;
+  padding: 48rpx 36rpx;
+  z-index: 1001;
+}
+
+/* ============================================================
+   输入框
+   ============================================================ */
+.glass-input {
+  background: rgba(120, 120, 128, 0.08);
+  border-radius: 16rpx;
+  padding: 24rpx 28rpx;
+  font-size: 32rpx;
+  color: var(--text-primary);
+}
+
+.glass-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* ============================================================
+   旧版兼容类（保留别名，兜底未改造页面）
+   ============================================================ */
+.card {
+  background: var(--bg-glass);
+  backdrop-filter: saturate(180%) blur(40rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(40rpx);
+  border-radius: 28rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+  padding: 32rpx;
+  margin: 20rpx 32rpx;
+}
+
+.list-group {
+  background: var(--bg-glass);
+  backdrop-filter: saturate(180%) blur(40rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(40rpx);
+  border-radius: 28rpx;
+  overflow: hidden;
+  border: 1rpx solid rgba(255, 255, 255, 0.12);
+  margin: 0 32rpx;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx;
+  min-height: 96rpx;
+  transition: background 0.15s ease;
+}
+
+.list-item:active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.list-divider {
+  height: 1rpx;
+  background: var(--separator);
+  margin-left: 84rpx;
+}
+
+/* 磨砂导航栏（吸顶） */
+.glass-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-glass);
+  backdrop-filter: saturate(180%) blur(40rpx);
+  -webkit-backdrop-filter: saturate(180%) blur(40rpx);
+}
+
+/* iOS 列表箭头（CSS 备用） */
+.chevron-right {
+  display: inline-block;
+  width: 16rpx;
+  height: 16rpx;
+  border-right: 3rpx solid var(--text-tertiary);
+  border-top: 3rpx solid var(--text-tertiary);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  margin-left: 8rpx;
+}

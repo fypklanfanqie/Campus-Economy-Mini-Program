@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "icon": "/components/icon/icon"
+  },
+  "navigationBarTitleText": "外卖代拿"
+}

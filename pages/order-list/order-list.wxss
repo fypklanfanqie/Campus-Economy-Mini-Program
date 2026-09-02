@@ -1,0 +1,196 @@
+/* pages/order-list/order-list.wxss - 订单列表样式（iOS 18 磨砂玻璃风格） */
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: 160rpx;
+}
+
+/* 磨砂吸顶 tab 栏 */
+.tabs-bar {
+  padding: 14rpx 0;
+}
+
+.tabs-scroll {
+  white-space: nowrap;
+  padding: 0 20rpx;
+}
+
+.tabs {
+  display: flex;
+  padding: 4rpx;
+}
+
+/* pill 胶囊 */
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14rpx 32rpx;
+  margin: 0 6rpx;
+  border-radius: 100rpx;
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  background: transparent;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+  font-weight: 500;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, #007AFF, #0A84FF);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 6rpx 18rpx rgba(0, 122, 255, 0.28);
+}
+
+/* 订单卡片 */
+.order-list {
+  flex: 1;
+  padding: 12rpx 0 40rpx;
+}
+
+.order-card {
+  margin: 20rpx 32rpx;
+  padding: 28rpx;
+  transition: transform 0.12s ease, opacity 0.15s ease;
+}
+
+.order-card:active {
+  transform: scale(0.985);
+  opacity: 0.92;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.order-type {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.order-type-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 16rpx;
+  background: rgba(120, 120, 128, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-type-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.order-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-top: 1rpx solid var(--separator);
+  border-bottom: 1rpx solid var(--separator);
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  flex: 1;
+  overflow: hidden;
+}
+
+.info-main {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.info-sub {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.order-price {
+  margin-left: 20rpx;
+  flex-shrink: 0;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18rpx;
+}
+
+.order-time {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+}
+
+.order-actions {
+  display: flex;
+}
+
+.action-pay {
+  font-size: 26rpx;
+  border-radius: 100rpx;
+  padding: 12rpx 34rpx;
+  line-height: 1.5;
+  font-weight: 600;
+  background: linear-gradient(135deg, #FF9500, #FFAA33);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6rpx 16rpx rgba(255, 149, 0, 0.28);
+}
+
+.action-pay::after {
+  border: none;
+}
+
+/* 空状态 */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  opacity: 0.5;
+  margin-bottom: 8rpx;
+}
+
+.go-home-btn {
+  width: 320rpx;
+  height: 88rpx;
+  font-size: 30rpx;
+  margin-top: 48rpx;
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 36rpx 0;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.no-more {
+  color: var(--text-tertiary);
+}
